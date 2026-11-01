@@ -505,7 +505,7 @@ function render(){
   if(hb){document.body.style.setProperty("--hbg",bgcss(IMG.home_bg));document.body.classList.add("hasbg")}
   else document.body.classList.remove("hasbg");
   var m=$("main"),keep=0,ol=m.querySelector(".list");if(ol&&V!=="home")keep=ol.scrollTop;
-  m.className=V==="home"?"home":"";
+  m.className=V==="home"?"home":"";document.documentElement.classList.toggle("inview",V!=="home");
   if(V==="home"){
     m.innerHTML=timesBar(d)+"<div class=grid>"+d.tiles.map(function(t){
       return "<button class='tile"+(t.sos?" sos":"")+"' data-v='"+h(t.id)+"'>"+icon(t.ic)+"<b class=serif>"+h(t.t)+"</b><span>"+h(t.s)+"</span></button>"}).join("")+"</div>"+(hb?"":"<div class=homeart aria-hidden=true>"+getArt(CFG.home_art||"line")+"</div>")+(window.MJ_TV?phoneQr(d):"");
@@ -529,7 +529,7 @@ function render(){
     var l=m.querySelector(".list");if(l)l.scrollTop=keep;
   }
 }
-function go(v){V=v;render()}
+function go(v){V=v;render();try{window.scrollTo(0,0)}catch(e){}}
 /* 홈 상단: 체크인·체크아웃 시간 (settings.json 의 checkin_time / checkout_time, 비우면 숨김) */
 function timesBar(d){
   var c=[[d.checkinLbl,CFG.checkin_time],[d.checkoutLbl,CFG.checkout_time]].filter(function(x){return x[0]&&String(x[1]||"").trim()});
@@ -588,13 +588,14 @@ function saveGuest(){
   if(!n){$("gn").focus();return}
   G.n=n;if(!G.c)G.c="en";
   store();
-  L={ko:"ko",ja:"ja",zh:"zh",tw:"zh"}[G.c]||"en";langSet=true;
+  L=uiLang(G.c);langSet=true;
   $("set").style.display="none";
   V="home";render();
   showWelcome(G.c);
 }
 
-/* 환영 화면: 게스트 이름이 있을 때 처음 열면 보여 준다 */
+function uiLang(c){return {ko:"ko",ja:"ja",zh:"zh",tw:"zh"}[c]||"en"}
+/* 환영 화면: 처음 열면 보여 준다 */
 function showWelcome(code){
   var w=W[code]||W[L]||W.en,e=$("wel"),d=D[L];if(!w||!d)return;
   try{sessionStorage.setItem("mj_wel","1")}catch(err){}
@@ -604,7 +605,7 @@ function showWelcome(code){
   e.innerHTML=(G.n&&w.e?"<p class=we>"+h(w.e)+"</p>":"")+"<h1 class=serif>"+g+"</h1><p class='wb serif'>"+h(d.brand)+"</p>"+
     (w.s?"<p class=ws>"+h(w.s)+"</p>":"")+"<button class=chip id=welGo>"+h(w.b)+" →</button>"+(window.MJ_TV&&w.h?"<p class=wh>"+h(w.h)+"</p>":"")+
     "<div class=welart aria-hidden=true>"+getArt(CFG.home_art||"line")+"</div>"+
-    "<div class=wlang>"+[["ko","한국어"],["en","English"],["ja","日本語"],["zh","中文"]].map(function(x){return "<button class=chip data-wl="+x[0]+" aria-pressed="+(x[0]===L)+" lang="+(x[0]==="zh"?"zh-CN":x[0])+">"+x[1]+"</button>"}).join("")+"</div>";
+    "<div class=wlang>"+Object.keys(W).map(function(k){return "<button class=chip data-wl="+h(k)+" aria-pressed="+(W[k]===w)+" lang="+h(W[k].l||k)+">"+h(W[k].n)+"</button>"}).join("")+"</div>";
   e.style.display="flex";
   if(window.MJ_TV)setTimeout(function(){var b=$("welGo");if(b)b.focus()},0)}
 
@@ -638,7 +639,7 @@ function startIdle(){
 document.addEventListener("click",function(e){
   if(e.target.closest("#brand")){taps++;clearTimeout(tapT);tapT=setTimeout(function(){taps=0},1500);if(taps>=5){taps=0;openSet()}}
   var wl=e.target.closest("[data-wl]");
-  if(wl){L=wl.dataset.wl;langSet=true;render();showWelcome(L);if(window.MJ_TV){var nb=document.querySelector("[data-wl='"+L+"']");if(nb)nb.focus()}return}
+  if(wl){var wc=wl.dataset.wl;L=uiLang(wc);langSet=true;render();showWelcome(wc);if(window.MJ_TV){var nb=document.querySelector("[data-wl='"+wc+"']");if(nb)nb.focus()}return}
   if(e.target.closest("#wel")){$("wel").style.display="none";V="home";render();return}
   var b=e.target.closest("button");
   if(b&&b.dataset.lg){G.c=b.dataset.lg;markLg()}
@@ -1030,6 +1031,32 @@ html.tv main.home>.phoneqr{bottom:calc(-1 * clamp(24px,4.2vw,60px) + 16px)}
 html.tv main.home .phoneqr .qrbox{width:160px}
 }
 @media (min-width:761px) and (min-height:521px) and (orientation:portrait){html.tv main.home .grid{margin-bottom:max(calc(min(26vh,34vw) * .75 - clamp(24px,4.2vw,60px) + 12px),250px)}}
+</style>
+<style id="fix-css">
+/* ---- 1. 한글 제목은 단어 단위로 줄바꿈 ("병원 · 긴 / 급" 방지) ---- */
+.side h1,.tile b,.item h3,#wel h1,#idle h2,.brand{word-break:keep-all;overflow-wrap:break-word}
+/* ---- 2. TV 홈: 휴대폰 QR 은 카드 아래 빈 자리에 들어가게 화면 높이에 맞춰 줄이고 글은 옆에, 낮은 화면에서는 카드 여백을 줄인다 ---- */
+@media (min-width:761px) and (min-height:521px) and (orientation:landscape){
+html.tv main.home>.phoneqr{flex-direction:row-reverse;align-items:flex-end;gap:14px}
+html.tv main.home .phoneqr .qrbox{width:min(160px,15vh)}
+html.tv main.home .phoneqr p{max-width:9em;text-align:right;line-height:1.5}
+html.tv main.home .grid .tile:nth-child(n){padding:clamp(14px,2.4vh,36px) clamp(18px,2vw,36px)}
+html.tv main.home .grid .tile b{font-size:clamp(26px,4.4vh,44px)}
+html.tv main.home .grid .tile::before{margin-bottom:clamp(8px,1.4vh,16px)}
+}
+/* ---- 3·4. 휴대폰: 메뉴 안은 페이지 전체가 스크롤, 상단 언어 버튼과 로고 사이 여백 ---- */
+@media (max-width:760px){
+header{padding-top:56px}
+html.inview,html.inview body{height:auto;min-height:100%}
+html.inview body{overflow:auto}
+html.inview #app{height:auto;min-height:100dvh}
+html.inview main{flex:none}
+html.inview .view{height:auto;grid-template-rows:auto}
+html.inview .list{overflow:visible;padding-right:0}
+}
+/* ---- 5. 환영 화면 언어가 많아도 줄바꿈해서 보이게 ---- */
+#wel .wlang{flex-wrap:wrap;justify-content:flex-end;max-width:min(760px,calc(100% - 16px))}
+@media (max-width:760px){#wel .wlang{justify-content:center;margin:0 auto}#wel .wlang .chip{min-height:36px;padding:0 8px}}
 </style>
 <script>
 /* 오프라인 캐시 (https 또는 localhost 에서만) */
