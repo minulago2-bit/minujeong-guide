@@ -272,6 +272,7 @@ main.home{overflow-y:auto}
       <button class="chip sosb" id="sosBtn">SOS</button>
       <button class="chip" id="langBtn">Language</button>
       
+      <button class="chip" id="mu" aria-label="Music" aria-pressed="false" hidden>♪</button>
       <button class="chip" id="th" aria-label="Theme">◐</button>
     </div>
   
@@ -747,6 +748,59 @@ window.MJ_NAVER_URL=function(id){var q=NV[id];return q?"https://map.naver.com/p/
 window.MJ_NAVER_LABEL=function(lang){return NL[lang]||NL.en};
 window.MJ_NAVER=function(id,lang){var q=NV[id];if(!q)return "";return "<a class='btn2 nv' target=_blank rel=noopener href='https://map.naver.com/p/search/"+encodeURIComponent(q)+"'>"+NL[lang]+"</a>"};
 window.MJ_CREDIT=function(lang){return "<p class=cr>"+CR[lang]+"</p>"};
+})();
+</script>
+<style id="music-css">
+.tools .chip#mu{font-size:.9em}
+.homeart .pal{transform-origin:50% 100%;transition:transform .12s linear}
+</style>
+<script id="music-js">
+/* ===== 배경음악: data/music.json 의 곡을 HTML5 audio로 순차/셔플 재생 ===== */
+(function(){
+var M={tracks:[],set:{}},au=null,idx=-1,order=[],started=false,ac=null,an=null,raf=0,lastT=0;
+var LBL={ko:"배경음악",en:"Music",ja:"音楽",zh:"背景音乐"};
+function $(i){return document.getElementById(i)}
+function pref(){try{return localStorage.getItem("mj_music")}catch(e){return null}}
+function setPref(v){try{localStorage.setItem("mj_music",v)}catch(e){}}
+function wanted(){var p=pref();if(p)return p==="on";return window.MJ_TV?/^y/i.test(M.set.tv_autoplay||"Y"):String(M.set.mobile_default||"off")==="on"}
+function btn(on){var b=$("mu");if(b){b.hidden=!M.tracks.length;b.setAttribute("aria-pressed",!!on)}}
+function shuffle(n){var a=[],i,j,t;for(i=0;i<n;i++)a.push(i);for(i=n-1;i>0;i--){j=Math.floor(Math.random()*(i+1));t=a[i];a[i]=a[j];a[j]=t}return a}
+function next(){
+  if(!M.tracks.length)return;
+  if(!order.length)order=M.set.order==="shuffle"?shuffle(M.tracks.length):M.tracks.map(function(x,i){return i});
+  idx=order.shift();au.src=M.tracks[idx].file;var p=au.play();if(p&&p.catch)p.catch(function(){btn(false)})}
+function react(){
+  if(!/^y/i.test(M.set.react_lines||"Y")||an||M.tracks.some(function(t){return /^https?:/i.test(t.file)})||!(window.AudioContext||window.webkitAudioContext))return;
+  try{if(matchMedia("(prefers-reduced-motion:reduce)").matches)return}catch(e){}
+  try{ac=new (window.AudioContext||window.webkitAudioContext)();var src=ac.createMediaElementSource(au);an=ac.createAnalyser();an.fftSize=256;src.connect(an);an.connect(ac.destination)}catch(e){an=null}}
+/* 하단 세로 선이 소리 크기에 따라 아주 조금 자란다 (초당 10회로 제한) */
+function loop(t){
+  raf=requestAnimationFrame(loop);if(t-lastT<100)return;lastT=t;
+  var p=document.querySelector(".homeart .pal");if(!p||!an)return;
+  var a=new Uint8Array(an.frequencyBinCount),s=0,i;an.getByteFrequencyData(a);for(i=0;i<a.length;i++)s+=a[i];
+  var lv=Math.min(1,s/a.length/90);p.style.transform=au.paused?"":"scaleY("+(1+lv*.04).toFixed(3)+")"}
+function play(){
+  if(!M.tracks.length)return;
+  if(!au){au=new Audio();au.preload="auto";au.volume=Math.max(0,Math.min(1,parseFloat(M.set.volume)||.4));au.addEventListener("ended",next);au.addEventListener("error",function(){if(M.tracks.length>1)next()});react()}
+  if(ac&&ac.state==="suspended")ac.resume();
+  if(idx<0)next();else{var p=au.play();if(p&&p.catch)p.catch(function(){btn(false)})}
+  if(an&&!raf)raf=requestAnimationFrame(loop);
+  btn(true)}
+function stop(){if(au)au.pause();btn(false)}
+/* 자동재생 차단 대비: 첫 터치/키 입력 때 시작 */
+function first(e){if(started||(e&&e.target&&e.target.closest&&e.target.closest("#mu")))return;started=true;if(wanted())play()}
+["pointerdown","touchstart","keydown"].forEach(function(ev){document.addEventListener(ev,first,true)});
+document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("#mu");if(!b)return;started=true;if(au&&!au.paused){setPref("off");stop()}else{setPref("on");play()}});
+window.MJ_MUSIC_CREDIT=function(lang){
+  var c=M.tracks.filter(function(t){return t.title});if(!c.length)return "";
+  return "<p class=cr>"+(LBL[lang]||LBL.en)+": "+c.map(function(t){var x=String(t.title)+(t.artist?" — "+t.artist:"")+(t.license?" ("+t.license+")":"");return String(x).replace(/[&<>"]/g,function(ch){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[ch]})}).join(" · ")+"</p>"};
+fetch("data/music.json",{cache:"no-cache"}).then(function(r){if(!r.ok)throw new Error("http");return r.json()}).then(function(j){
+  var ok=function(t){return t&&typeof t.file==="string"&&/^[\w\-\/.]+\.(mp3|m4a|ogg)$|^https:\/\/\S+$/i.test(t.file)&&!/^\s*(n|no|false|0)\s*$/i.test(String(t.show||""))};
+  M.set=(j&&j.settings)||{};M.tracks=((j&&j.tracks)||[]).filter(ok);
+  btn(false);if(started&&wanted())play();
+  if(typeof V!=="undefined"&&V==="guide"&&typeof render==="function")render();
+}).catch(function(){M.tracks=[];btn(false)});
+btn(false);
 })();
 </script>
 <style id="feature-css">
