@@ -106,17 +106,5 @@
     "value": "line",
     "desc": "홈 하단 그림: line / point / dialogue / stone (이우환풍), charcoal / brush (이배풍), none",
     "example": "line"
-  },
-  {
-    "key": "weather_lat",
-    "value": "37.5806",
-    "desc": "날씨 위치 위도 (비우면 날씨 숨김)",
-    "example": "37.5806"
-  },
-  {
-    "key": "weather_lon",
-    "value": "126.9686",
-    "desc": "날씨 위치 경도",
-    "example": "126.9686"
   }
 ]

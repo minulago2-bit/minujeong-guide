@@ -42,7 +42,6 @@ webos/                  (선택) webOS 앱 패키지 파일
 | `review_url` | 후기 링크 (체크아웃 화면) | `https://...` |
 | `site_url` | 가이드 공개 주소 (TV의 "휴대폰에서 보기" QR) | |
 | `idle_seconds` | TV에서 조작이 없을 때 대기화면까지 시간(초) | `120` |
-| `weather_lat`, `weather_lon` | 날씨 위치. 비우면 날씨를 숨깁니다 | |
 
 `value`만 고치고 `key`는 그대로 두세요.
 

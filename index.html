@@ -273,10 +273,8 @@ main.home{overflow-y:auto}
       <button class="chip" id="langBtn">Language</button>
       
       <button class="chip" id="mu" aria-label="Music" aria-pressed="false" hidden>♪</button>
-      <button class="chip" id="th" aria-label="Theme">◐</button>
     </div>
   
-  <div id="wx" aria-live="off"></div>
   <main id="main"></main>
 </div>
 <div id="taxi"></div>
@@ -409,16 +407,6 @@ function openCo(){
     list.map(function(it){return "<button class=ck data-ck='"+h(it[4])+"' aria-pressed="+!!ck[it[4]]+"><i></i><span><b>"+h(it[0])+"</b><small>"+esc(it[1])+"</small></span></button>"}).join("")+
     "</div>"+r+"<button class=chip id=coX>"+h(d.qrClose)+"</button>";
   s.style.display="flex"}
-/* 날씨: 실패하면 조용히 숨김 */
-var WX={ko:["맑음","구름 조금","흐림","안개","이슬비","비","눈","소나기","뇌우"],en:["Clear","Partly cloudy","Cloudy","Fog","Drizzle","Rain","Snow","Showers","Thunderstorm"],ja:["晴れ","晴れ時々曇り","曇り","霧","霧雨","雨","雪","にわか雨","雷雨"],zh:["晴","少云","多云","雾","毛毛雨","雨","雪","阵雨","雷雨"]},WXD=null;
-function wxIdx(c){return c===0?0:c<=2?1:c===3?2:c<=48?3:c<=57?4:c<=67?5:c<=77?6:c<=82?7:c<=86?6:8}
-function showWx(){var e=$("wx");if(!e)return;e.innerHTML=WXD?"<span class=wl>"+h((WX[L]||WX.en)[wxIdx(WXD.c)])+"</span> "+Math.round(WXD.t)+"°":""}
-function loadWx(){
-  var la=parseFloat(CFG.weather_lat),lo=parseFloat(CFG.weather_lon);if(isNaN(la)||isNaN(lo)){WXD=null;showWx();return}
-  fetch("https://api.open-meteo.com/v1/forecast?latitude="+la+"&longitude="+lo+"&current=temperature_2m,weather_code&timezone=Asia%2FSeoul",{cache:"no-store"})
-    .then(function(r){if(!r.ok)throw new Error("http");return r.json()})
-    .then(function(j){var c=j&&j.current;if(!c||typeof c.temperature_2m!=="number")throw new Error("shape");WXD={t:c.temperature_2m,c:c.weather_code|0};showWx()})
-    .catch(function(){WXD=null;showWx()})}
 
 /* ---------- 시트 읽기 ---------- */
 function csv(t){var rows=[],r=[],c="",q=false;
@@ -501,7 +489,6 @@ function apply(raw,src){
   SRC=src;
   if(!D[L])L="en";
   render();idleReset(true);
-  if(!WXD)loadWx();
   if(welPending){welPending=false;showWelcome(G.c)}
 }
 
@@ -514,7 +501,7 @@ function render(){
   $("brand").innerHTML=h(d.brand)+"<small>"+h(d.sub)+"</small>";
   document.querySelectorAll("[data-l]").forEach(function(x){x.setAttribute("aria-pressed",x.dataset.l===L)});
   $("langBtn").textContent=d.langBtn;
-  $("sosBtn").textContent=d.sosBtn||"SOS";showWx();
+  $("sosBtn").textContent=d.sosBtn||"SOS";
   var hb=(V==="home"&&IMG.home_bg);
   $("app").classList.toggle("hb",!!hb);
   if(hb){document.body.style.setProperty("--hbg",bgcss(IMG.home_bg));document.body.classList.add("hasbg")}
@@ -652,7 +639,6 @@ document.addEventListener("click",function(e){
   else if(b&&b.dataset.l){L=b.dataset.l;langSet=true;$("lang").style.display="none";render()}
   else if(b&&b.id==="langBtn")openLang();
   else if(b&&b.id==="langX")$("lang").style.display="none";
-  else if(b&&b.id==="th"){var r=document.documentElement,dk=r.getAttribute("data-theme")==="dark"||(!r.getAttribute("data-theme")&&matchMedia("(prefers-color-scheme:dark)").matches);r.setAttribute("data-theme",dk?"light":"dark")}
   else if(b&&b.id==="taxiOpen"){var t=$("taxi");t.innerHTML="<div>"+h(D[L].taxiTxt)+"</div><div class='a serif'>"+h(CFG.taxi_addr_ko||"")+"</div><div>"+h(CFG.taxi_addr_en||"")+"</div><button class=chip id=taxiX style='color:var(--ink);background:var(--bg)'>"+h(D[L].taxiClose)+"</button>";t.style.display="flex"}
   else if(b&&b.id==="taxiX")$("taxi").style.display="none";
   else if(b&&b.id==="qrX")$("qr").style.display="none";
@@ -667,7 +653,7 @@ document.addEventListener("visibilitychange",function(){if(!document.hidden)refr
   if(raw)apply(raw,"저장된 시트 사본");
   (SHEET?load().then(function(ok){if(!ok&&!raw)return loadData()}):loadData())
     .catch(function(){apply(SNAP,"내장 비상 정보")})
-    .then(function(){setInterval(loadWx,30*60*1000);setInterval(refresh,Math.max(30,parseInt(CFG.refresh_seconds)||300)*1000)});
+    .then(function(){setInterval(refresh,Math.max(30,parseInt(CFG.refresh_seconds)||300)*1000)});
 })();
 
 </script>
@@ -846,11 +832,8 @@ btn(false);
 .pin .big{flex:none;min-width:2.6em}
 .pin .big{font-size:1.7em;font-weight:300;line-height:1.15;color:var(--alert)}
 .pin span:not(.big){font-size:.68em;line-height:1.4;color:var(--mute)}
-/* ---- 상단: 긴급 버튼과 날씨 ---- */
+/* ---- 상단: 긴급 버튼 ---- */
 .tools .chip.sosb{color:var(--alert);opacity:1}
-#wx{position:absolute;top:0;left:0;min-height:44px;display:flex;align-items:center;padding:0 10px;font-size:.78em;letter-spacing:.08em;color:var(--mute);z-index:2}
-#wx:empty{display:none}
-@media (max-width:480px){#wx .wl{display:none}#wx{padding:0 6px}}
 /* ---- Wi-Fi·후기 QR (TV) ---- */
 .wq{display:flex;align-items:center;gap:24px;margin-top:16px}
 .wq .qrbox{width:220px;flex:none;background:#f6f2e9;padding:10px;border:1px solid var(--line)}
@@ -907,7 +890,6 @@ html.tv #lang .lo{min-height:100px}
 html.tv #lang .lc{min-width:88px;min-height:88px}
 html.tv #qr .qrbox{width:min(52vh,70vw,520px)}
 html.tv .phoneqr .qrbox{width:180px}
-html.tv #wx{min-height:72px;font-size:.85em;padding:0 18px}
 html.tv .wq .qrbox{width:300px}
 html.tv #co .ck{padding:22px 4px}
 html.tv #co .ck i{width:28px;height:28px}

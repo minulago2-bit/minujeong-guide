@@ -1,6 +1,6 @@
 /* 미누정 게스트 가이드 서비스워커: 오프라인에서도 핵심 정보가 보이도록 캐시한다.
    콘텐츠를 바꾼 뒤 반드시 새로 받게 하려면 VERSION 숫자를 올린다. */
-var VERSION = "mj-v1";
+var VERSION = "mj-v2";
 var CORE = [
   "./",
   "index.html",
@@ -54,7 +54,7 @@ self.addEventListener("fetch", function (e) {
   var req = e.request, url = new URL(req.url);
   if (req.method !== "GET") return;
   if (req.headers.has("range")) return; // 음원 부분 요청은 브라우저에 맡긴다
-  if (/open-meteo\.com|docs\.google\.com/.test(url.host)) return; // 날씨·시트는 항상 새로
+  if (/docs\.google\.com/.test(url.host)) return; // 시트는 항상 새로
   if (url.origin === location.origin) {
     if (req.mode === "navigate" || /\.(html|json)$/.test(url.pathname) || url.pathname.slice(-1) === "/") e.respondWith(networkFirst(req));
     else e.respondWith(cacheFirst(req));
