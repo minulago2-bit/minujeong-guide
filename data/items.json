@@ -596,25 +596,6 @@
     "url": ""
   },
   {
-    "id": "care_04",
-    "menu": "care",
-    "order": "4",
-    "show": "Y",
-    "type": "일반",
-    "title_ko": "서울적십자병원",
-    "title_en": "Seoul Red Cross Hospital 서울적십자병원",
-    "title_ja": "ソウル赤十字病院 서울적십자병원",
-    "title_zh": "首尔红十字医院 서울적십자병원",
-    "body_ko": "종로구 새문안로. 응급 운영 여부는 방문 전 전화로 확인하세요.",
-    "body_en": "Saemunan-ro (새문안로), Jongno-gu. Call ahead to confirm emergency service.",
-    "body_ja": "鍾路区セムナン路（새문안로）。救急の可否は事前に電話で確認を。",
-    "body_zh": "钟路区新门路（새문안로）。急诊情况请先电话确认。",
-    "ja_ok": "N",
-    "zh_ok": "N",
-    "url": "",
-    "langs": ""
-  },
-  {
     "id": "care_05",
     "menu": "care",
     "order": "5",
@@ -1087,5 +1068,24 @@
     "zh_ok": "N",
     "url": "https://www.google.com/maps/search/?api=1&query=%EC%84%9C%EC%9A%B8%EB%8C%80%ED%95%99%EA%B5%90%EB%B3%91%EC%9B%90",
     "langs": "en,ja,zh"
+  },
+  {
+    "id": "care_07",
+    "menu": "care",
+    "order": "4.6",
+    "show": "Y",
+    "type": "일반",
+    "title_ko": "세브란스병원 국제진료센터",
+    "title_en": "Severance Hospital, International Health Care Center",
+    "title_ja": "セブランス病院 国際診療センター",
+    "title_zh": "Severance 医院 国际诊疗中心",
+    "body_ko": "서울 서대문구 연세로 50-1\n영어 진료와 다국어 통역을 지원합니다. 예약·진료시간은 전화 또는 공식 안내에서 확인하세요.\n전화 02-2228-5800",
+    "body_en": "50-1 Yonsei-ro, Seodaemun-gu, Seoul\nCare in English and interpreters for other languages. Check appointments and hours by phone or on the official site.\nPhone 02-2228-5800",
+    "body_ja": "ソウル市西大門区延世路50-1\n英語での診療と多言語の通訳に対応。予約・診療時間は電話または公式案内でご確認ください。\n電話 02-2228-5800",
+    "body_zh": "首尔西大门区延世路50-1\n提供英语诊疗及多语种翻译。预约与诊疗时间请致电或查看官方信息。\n电话 02-2228-5800",
+    "ja_ok": "N",
+    "zh_ok": "N",
+    "langs": "en",
+    "url": "https://www.google.com/maps/search/?api=1&query=%EC%84%B8%EB%B8%8C%EB%9E%80%EC%8A%A4%EB%B3%91%EC%9B%90%20%EA%B5%AD%EC%A0%9C%EC%A7%84%EB%A3%8C%EC%84%BC%ED%84%B0"
   }
 ]
