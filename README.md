@@ -176,22 +176,13 @@ ares-launch --device tv com.minujeong.guide
 
 ## GitHub Pages 배포
 
-`.github/workflows/pages.yml`이 `main`과 작업 브랜치를 함께 배포합니다.
+공개 주소 https://minulago2-bit.github.io/minujeong-guide/ 는 **Settings → Pages**에서 고른 브랜치를 보여 줍니다.
 
-| 주소 | 내용 |
-|---|---|
-| https://minulago2-bit.github.io/minujeong-guide/ | `main` (공개 사이트) |
-| https://minulago2-bit.github.io/minujeong-guide/preview/ | 작업 브랜치 `feature/tv-standbyme` 미리보기 |
+1. 저장소 **Settings → Pages**로 갑니다.
+2. Source는 **Deploy from a branch**, Branch는 배포할 브랜치(지금은 `feature/tv-standbyme`) / `(root)`로 두고 **Save**를 누릅니다.
+3. 그 브랜치에 push하면 1~2분 뒤 공개 주소에 반영됩니다.
 
-처음 한 번만 설정합니다.
-
-1. 저장소 **Settings → Pages**에서 Source를 **GitHub Actions**로 바꿉니다.
-2. **Settings → Environments → github-pages → Deployment branches and tags**에 `feature/tv-standbyme`를 추가합니다. (`main`만 허용되어 있으면 작업 브랜치에서 배포가 막힙니다.)
-3. **Actions** 탭에서 "Pages (main + preview)"를 열고 **Run workflow**를 누르거나, 두 브랜치 중 하나에 push합니다.
-
-- 이후에는 `main`이나 작업 브랜치에 push할 때마다 1~2분 뒤 두 주소가 함께 갱신됩니다.
-- 미리보기할 브랜치를 바꾸려면 `pages.yml`의 `PREVIEW_BRANCH`와 `on.push.branches`를 고칩니다.
-- 작업 브랜치를 `main`에 합치고 지워도 `main` 배포는 계속됩니다.
+작업 브랜치를 Pull Request로 `main`에 합친 뒤에는 Branch를 다시 `main`으로 바꿔 두면 됩니다.
 
 ## 오프라인과 홈 화면 추가
 
