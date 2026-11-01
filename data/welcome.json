@@ -4,89 +4,109 @@
     "show": "Y",
     "name": "한국어",
     "lang": "ko",
-    "greeting": "{n}님, 환영합니다",
-    "sub": "미누정에서의 시간이 오래 기억에 남기를 바랍니다. 편히 쉬다 가세요.",
-    "button": "시작하기"
+    "eyebrow": "환영합니다",
+    "greeting": "{n}님, 반갑습니다!",
+    "sub": "서촌 골목의 한옥 숙소 미누정에 오신 것을 환영합니다.\n머무시는 동안 편안하고 즐거운 시간 보내시길 바랍니다.",
+    "button": "시작하기",
+    "hint": "화면을 터치하거나 리모컨의 확인 버튼을 누르세요"
   },
   {
     "code": "en",
     "show": "Y",
     "name": "English",
     "lang": "en",
-    "greeting": "Welcome, {n}",
-    "sub": "We’re delighted to have you at Minujeong Hanok. Please make yourself at home.",
-    "button": "Start"
+    "eyebrow": "Welcome",
+    "greeting": "So glad you’re here, {n}!",
+    "sub": "Welcome to Minujeong, a hanok stay in the alleys of Seochon.\nWe hope you have a restful and happy time with us.",
+    "button": "Start",
+    "hint": "Touch the screen or press OK on the remote"
   },
   {
     "code": "ja",
     "show": "Y",
     "name": "日本語",
     "lang": "ja",
-    "greeting": "{n}様、ようこそ",
-    "sub": "ミヌジョンでのひとときが、心に残る時間になりますように。どうぞごゆっくりお過ごしください。",
-    "button": "はじめる"
+    "eyebrow": "ようこそ",
+    "greeting": "{n}様、お待ちしておりました",
+    "sub": "西村（ソチョン）の路地にある韓屋の宿、ミヌジョンへようこそ。\nご滞在中、心地よく楽しい時間をお過ごしください。",
+    "button": "はじめる",
+    "hint": "画面にタッチするか、リモコンの決定ボタンを押してください"
   },
   {
     "code": "zh",
     "show": "Y",
     "name": "中文(简体)",
     "lang": "zh-CN",
-    "greeting": "欢迎您，{n}",
-    "sub": "愿您在 Minujeong 韩屋度过难忘的时光。请像在家一样放松。",
-    "button": "开始"
+    "eyebrow": "欢迎光临",
+    "greeting": "{n}，很高兴见到您！",
+    "sub": "欢迎来到西村小巷里的韩屋民宿 Minujeong。\n祝您入住期间舒适愉快。",
+    "button": "开始",
+    "hint": "请触摸屏幕或按遥控器的确认键"
   },
   {
     "code": "tw",
     "show": "Y",
     "name": "中文(繁體)",
     "lang": "zh-TW",
-    "greeting": "歡迎您，{n}",
-    "sub": "願您在 Minujeong 韓屋度過難忘的時光。請像在家一樣放鬆。",
-    "button": "開始"
+    "eyebrow": "歡迎光臨",
+    "greeting": "{n}，很高興見到您！",
+    "sub": "歡迎來到西村巷弄裡的韓屋民宿 Minujeong。\n祝您入住期間舒適愉快。",
+    "button": "開始",
+    "hint": "請觸碰螢幕或按遙控器的確認鍵"
   },
   {
     "code": "es",
     "show": "Y",
     "name": "Español",
     "lang": "es",
-    "greeting": "¡Bienvenido/a, {n}!",
-    "sub": "Nos alegra tenerte en Minujeong Hanok. Siéntete como en casa.",
-    "button": "Empezar"
+    "eyebrow": "Bienvenido/a",
+    "greeting": "¡Qué alegría tenerte aquí, {n}!",
+    "sub": "Bienvenido/a a Minujeong, un hanok en los callejones de Seochon.\nEsperamos que disfrutes de una estancia cómoda y agradable.",
+    "button": "Empezar",
+    "hint": "Toca la pantalla o pulsa OK en el mando"
   },
   {
     "code": "fr",
     "show": "Y",
     "name": "Français",
     "lang": "fr",
-    "greeting": "Bienvenue, {n}",
-    "sub": "Nous sommes ravis de vous accueillir à Minujeong Hanok. Faites comme chez vous.",
-    "button": "Commencer"
+    "eyebrow": "Bienvenue",
+    "greeting": "Ravis de vous accueillir, {n} !",
+    "sub": "Bienvenue à Minujeong, un hanok niché dans les ruelles de Seochon.\nNous vous souhaitons un séjour paisible et agréable.",
+    "button": "Commencer",
+    "hint": "Touchez l’écran ou appuyez sur OK sur la télécommande"
   },
   {
     "code": "de",
     "show": "Y",
     "name": "Deutsch",
     "lang": "de",
-    "greeting": "Willkommen, {n}",
-    "sub": "Wir freuen uns, Sie im Minujeong Hanok zu begrüßen. Fühlen Sie sich wie zu Hause.",
-    "button": "Los geht’s"
+    "eyebrow": "Willkommen",
+    "greeting": "Schön, dass Sie da sind, {n}!",
+    "sub": "Willkommen im Minujeong, einem Hanok in den Gassen von Seochon.\nWir wünschen Ihnen einen erholsamen und schönen Aufenthalt.",
+    "button": "Los geht’s",
+    "hint": "Tippen Sie auf den Bildschirm oder drücken Sie OK auf der Fernbedienung"
   },
   {
     "code": "th",
     "show": "Y",
     "name": "ไทย",
     "lang": "th",
-    "greeting": "ยินดีต้อนรับ คุณ{n}",
-    "sub": "ขอให้การพักที่ Minujeong Hanok เป็นความทรงจำที่ดี ทำตัวตามสบายได้เลย",
-    "button": "เริ่มเลย"
+    "eyebrow": "ยินดีต้อนรับ",
+    "greeting": "ยินดีที่ได้พบ คุณ{n}!",
+    "sub": "ยินดีต้อนรับสู่ Minujeong ที่พักฮันอกในตรอกของซอชอน\nขอให้มีช่วงเวลาที่สบายและมีความสุขระหว่างการเข้าพัก",
+    "button": "เริ่มเลย",
+    "hint": "แตะหน้าจอหรือกดปุ่ม OK บนรีโมต"
   },
   {
     "code": "vi",
     "show": "Y",
     "name": "Tiếng Việt",
     "lang": "vi",
-    "greeting": "Chào mừng {n}",
-    "sub": "Chúc bạn có khoảng thời gian đáng nhớ tại Minujeong Hanok. Cứ thoải mái như ở nhà nhé.",
-    "button": "Bắt đầu"
+    "eyebrow": "Chào mừng",
+    "greeting": "Rất vui được gặp {n}!",
+    "sub": "Chào mừng bạn đến Minujeong, nhà hanok trong những con hẻm Seochon.\nChúc bạn có khoảng thời gian thoải mái và vui vẻ.",
+    "button": "Bắt đầu",
+    "hint": "Chạm vào màn hình hoặc nhấn OK trên điều khiển"
   }
 ]

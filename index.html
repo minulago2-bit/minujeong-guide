@@ -363,6 +363,7 @@ try{var sv=localStorage.getItem("mj_guest");if(sv)G=JSON.parse(sv)}catch(err){}
 try{var lp=new URLSearchParams(location.search).get("lang");if(lp&&LANGS.indexOf(lp)>=0){L=lp;langSet=true}}catch(err){}
 /* ?guest=이름 : 인사말 뒤에 이름 표시 (이 기기에 저장하지 않음) */
 try{var gp=new URLSearchParams(location.search).get("guest");if(gp&&gp.trim())G={n:gp.trim().slice(0,40),c:G.c}}catch(err){}
+var welPending=!!G.n;
 var $=function(i){return document.getElementById(i)};
 function store(){try{localStorage.setItem("mj_guest",JSON.stringify(G))}catch(err){}}
 function h(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]})}
@@ -495,12 +496,13 @@ function apply(raw,src){
         (it.type==="그룹"||it.type==="group")?"g":"",it.action||"",it.langs||"",yes2(it.checklist)])});
     o.slides=slides.filter(function(s){return !(yes2(s.photo_only)&&!IMG[s.image_key])}).map(function(s){return {t:f(s,"title"),c:f(s,"caption"),img:s.image_key,tod:s.tod,art:s.art}});
     D[l]=o});
-  W={};raw.welcome.filter(function(r){return yes(r.show)}).forEach(function(r){W[r.code]={n:r.name,l:r.lang,g:r.greeting,s:r.sub,b:r.button}});
+  W={};raw.welcome.filter(function(r){return yes(r.show)}).forEach(function(r){W[r.code]={n:r.name,l:r.lang,e:r.eyebrow,g:r.greeting,s:r.sub,b:r.button,h:r.hint}});
   if(!langSet)L=detectLang();
   SRC=src;
   if(!D[L])L="en";
   render();idleReset(true);
   if(!WXD)loadWx();
+  if(welPending){welPending=false;showWelcome(G.c)}
 }
 
 /* ---------- 화면 ---------- */
@@ -589,12 +591,18 @@ function saveGuest(){
   store();
   L={ko:"ko",ja:"ja",zh:"zh",tw:"zh"}[G.c]||"en";langSet=true;
   $("set").style.display="none";
-  var w=W[G.c]||W.en,e=$("wel");
-  e.lang=w.l;
-  e.innerHTML="<h1 class=serif>"+h(w.g).replace("{n}",h(G.n))+"</h1><p>"+h(w.s)+"</p><button class=chip id=welGo>"+h(w.b)+"</button>";
-  e.style.display="flex";
   V="home";render();
+  showWelcome(G.c);
 }
+
+/* 환영 화면: 게스트 이름이 있을 때 처음 열면 보여 준다 */
+function showWelcome(code){
+  var w=W[code]||W[L]||W.en,e=$("wel"),d=D[L];if(!w||!G.n||!d)return;
+  e.lang=w.l;
+  e.innerHTML=(w.e?"<p class=we>"+h(w.e)+"</p>":"")+"<h1 class=serif>"+h(w.g).replace("{n}",h(G.n))+"</h1><p class='wb serif'>"+h(d.brand)+"</p>"+
+    (w.s?"<p class=ws>"+h(w.s)+"</p>":"")+"<button class=chip id=welGo>"+h(w.b)+" →</button>"+(window.MJ_TV&&w.h?"<p class=wh>"+h(w.h)+"</p>":"");
+  e.style.display="flex";
+  if(window.MJ_TV)setTimeout(function(){var b=$("welGo");if(b)b.focus()},0)}
 
 /* ---------- 대기화면 ---------- */
 function todName(){var hr=new Date().getHours();return hr>=4&&hr<9?"dawn":hr<16?"day":hr<20?"dusk":"night"}
@@ -625,6 +633,7 @@ function startIdle(){
 /* ---------- 이벤트 ---------- */
 document.addEventListener("click",function(e){
   if(e.target.closest("#brand")){taps++;clearTimeout(tapT);tapT=setTimeout(function(){taps=0},1500);if(taps>=5){taps=0;openSet()}}
+  if(e.target.closest("#wel")){$("wel").style.display="none";V="home";render();return}
   var b=e.target.closest("button");
   if(b&&b.dataset.lg){G.c=b.dataset.lg;markLg()}
   else if(b&&b.id==="welGo"){$("wel").style.display="none";V="home";render()}
@@ -804,6 +813,16 @@ btn(false);
 })();
 </script>
 <style id="feature-css">
+/* ---- 환영 화면: 작은 머리말 · 이름 인사 · 브랜드 · 두 줄 안내 · 시작 · (TV) 조작 안내 ---- */
+/* 하단 그림이 화면 밖으로 넘쳐 모바일 페이지가 가로로 넓어지던 문제: 보이는 모습은 그대로 두고 잘라 낸다 */
+.homeart{overflow:hidden}
+#wel{cursor:pointer}
+#wel .we{font-size:.8em;letter-spacing:.42em;opacity:.7}
+#wel .wb{font-size:1.25em;letter-spacing:.5em;opacity:.9;margin-top:-6px}
+#wel>*{max-width:100%;box-sizing:border-box}
+#wel h1{overflow-wrap:anywhere}
+#wel .ws{max-width:min(34em,100%);font-size:1em;line-height:1.9;white-space:pre-line;opacity:.8}
+#wel .wh{font-size:.78em;letter-spacing:.06em;opacity:.55;margin-top:6px}
 /* ---- 이용 안내 그룹 제목: 작은 자간 글씨, 선은 다음 항목이 그린다 ---- */
 .grp{margin:0;padding:44px 4px 12px;font-weight:300;font-size:.72em;letter-spacing:.32em;color:var(--mute)}
 .list>.grp:first-child{padding-top:4px}
