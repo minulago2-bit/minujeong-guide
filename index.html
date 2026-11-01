@@ -809,8 +809,9 @@ btn(false);
 .list>.grp:first-child{padding-top:4px}
 .lgs{margin:8px 0 0!important;font-size:.8em!important;letter-spacing:.06em;color:var(--accent)!important}
 /* ---- 긴급번호 고정 (왼쪽 열 / 모바일 상단) ---- */
-.pin{display:flex;flex-wrap:wrap;margin-top:28px;border-top:1px solid var(--alert)}
-.pin>div{flex:1 1 64px;padding:16px 4px 0;display:flex;flex-direction:column;gap:2px;min-width:0}
+.pin{display:flex;flex-direction:column;margin-top:28px;border-top:1px solid var(--alert)}
+.pin>div{display:flex;align-items:baseline;gap:16px;padding:14px 4px 0;min-width:0}
+.pin .big{flex:none;min-width:2.6em}
 .pin .big{font-size:1.7em;font-weight:300;line-height:1.15;color:var(--alert)}
 .pin span:not(.big){font-size:.68em;line-height:1.4;color:var(--mute)}
 /* ---- 상단: 긴급 버튼과 날씨 ---- */
@@ -838,7 +839,7 @@ btn(false);
 #co .wq{justify-content:center}
 #co .chip{margin-top:6px;min-width:140px;min-height:60px}
 @supports not (inset:0){#co{top:0;right:0;bottom:0;left:0}}
-@media (max-width:760px){.pin .big{font-size:1.45em}#co{justify-content:flex-start}}
+@media (max-width:760px){.pin{flex-direction:row}.pin>div{flex:1 1 0;flex-direction:column;gap:2px}.pin .big{font-size:1.45em;min-width:0}#co{justify-content:flex-start}}
 </style>
 <style id="tv-css">
 /* ---- 링크·전화 (휴대폰/PC) ---- */
