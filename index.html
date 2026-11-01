@@ -269,11 +269,13 @@ main.home{overflow-y:auto}
   
     <div class="brand serif" id="brand"></div>
     <div class="tools">
+      <button class="chip sosb" id="sosBtn">SOS</button>
       <button class="chip" id="langBtn">Language</button>
       
       <button class="chip" id="th" aria-label="Theme">◐</button>
     </div>
   
+  <div id="wx" aria-live="off"></div>
   <main id="main"></main>
 </div>
 <div id="taxi"></div>
@@ -282,6 +284,7 @@ main.home{overflow-y:auto}
 <div id="set"></div>
 <div id="lang"></div>
 <div id="qr"></div>
+<div id="co"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
 <script>
 /* ---------- 추상 아트: 이우환풍(선·점·돌, 붓의 농담) / 이배풍(숯, 먹의 획) ---------- */
@@ -357,6 +360,8 @@ var D={},W={},CFG={},IMG={},SRC="내장 스냅샷",SYNC="",LAST="",L="en",V="hom
 var G={n:"",c:""},taps=0,tapT,QR=[];
 try{var sv=localStorage.getItem("mj_guest");if(sv)G=JSON.parse(sv)}catch(err){}
 try{var lp=new URLSearchParams(location.search).get("lang");if(lp&&LANGS.indexOf(lp)>=0){L=lp;langSet=true}}catch(err){}
+/* ?guest=이름 : 인사말 뒤에 이름 표시 (이 기기에 저장하지 않음) */
+try{var gp=new URLSearchParams(location.search).get("guest");if(gp&&gp.trim())G={n:gp.trim().slice(0,40),c:G.c}}catch(err){}
 var $=function(i){return document.getElementById(i)};
 function store(){try{localStorage.setItem("mj_guest",JSON.stringify(G))}catch(err){}}
 function h(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]})}
@@ -368,6 +373,50 @@ function linkBtn(u,t,label,cls){
 /* 본문 속 전화번호는 TV가 아닐 때 tel: 링크로 */
 function body(s){var x=esc(s);return window.MJ_TV?x:x.replace(/(^|[^\d-])(0\d{1,2}-\d{3,4}-\d{4})(?![\d-])/g,"$1<a class=tel href='tel:$2'>$2</a>")}
 function telBig(n){return !window.MJ_TV&&/^\d{3,4}$/.test(n)?"<a class=tel href='tel:"+n+"'>"+h(n)+"</a>":h(n)}
+/* 병원: 외국어 진료 가능 언어 (langs: "en,ja,zh") */
+var LANGNAME={ko:"한국어",en:"English",ja:"日本語",zh:"中文",ru:"Русский",vi:"Tiếng Việt",th:"ไทย",mn:"Монгол",ar:"العربية",fr:"Français",de:"Deutsch",es:"Español"};
+function langLine(v,d){var a=String(v||"").split(/[\s,]+/).filter(Boolean);return a.length?"<p class=lgs>"+h(d.langCare)+" · "+a.map(function(x){return h(LANGNAME[x]||x)}).join(" · ")+"</p>":""}
+/* 항목별 동작: wifi / contact / checkout */
+function wifiQr(){var n=CFG.wifi_name;if(!n)return "";var e=function(s){return String(s||"").replace(/([\\;,:"])/g,"\\$1")};return "WIFI:T:"+(CFG.wifi_pw?"WPA":"nopass")+";S:"+e(n)+";P:"+e(CFG.wifi_pw)+";;"}
+function action(a,d){
+  if(a==="wifi"){
+    if(!CFG.wifi_name)return "";
+    if(window.MJ_TV){var q=qrSvg(wifiQr());return q?"<div class=wq><div class=qrbox>"+q+"</div><p>"+h(d.wifiScan)+"</p></div>":""}
+    return "<div class=acts><button class=btn2 data-copy=wifi_name>"+h(d.copyName)+"</button>"+(CFG.wifi_pw?"<button class=btn2 data-copy=wifi_pw>"+h(d.copyPw)+"</button>":"")+"</div>"}
+  if(a==="contact"){
+    var b="",k=cleanUrl(CFG.host_kakao_url),w=String(CFG.host_whatsapp||"").replace(/\D/g,""),p=String(CFG.host_phone||"").replace(/[^\d+]/g,"");
+    if(k)b+=linkBtn(k,d.kakao,d.kakao,"btn2");
+    if(w)b+=linkBtn("https://wa.me/"+w,d.whatsapp,d.whatsapp,"btn2");
+    if(p)b+=window.MJ_TV?linkBtn("tel:"+p,d.call,d.call,"btn2"):"<a class=btn2 href='tel:"+h(p)+"'>"+h(d.call)+"</a>";
+    return b?"<div class=acts>"+b+"</div>":""}
+  if(a==="checkout")return "<div class=acts><button class=btn2 id=coOpen>"+h(d.coBtn)+"</button></div>";
+  return ""}
+function copyText(t,btn,d){
+  function done(){var o=btn.textContent;btn.textContent=d.copied;setTimeout(function(){btn.textContent=o},1600)}
+  function legacy(){var x=document.createElement("textarea");x.value=t;x.style.position="fixed";x.style.opacity="0";document.body.appendChild(x);x.select();try{document.execCommand("copy");done()}catch(err){}document.body.removeChild(x)}
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(done,legacy);else legacy()}
+/* 체크아웃 화면 */
+function ckState(){try{return JSON.parse(localStorage.getItem("mj_ck")||"{}")||{}}catch(err){return {}}}
+function openCo(){
+  var d=D[L],ck=ckState(),sec=d.sec.guide||{i:[]},rv=cleanUrl(CFG.review_url),r="";
+  var list=sec.i.filter(function(it){return it[8]});
+  if(rv){if(window.MJ_TV){var q=qrSvg(rv);r=q?"<div class=wq><div class=qrbox>"+q+"</div><p>"+h(d.reviewAsk)+"</p></div>":""}
+    else r="<p class=qn>"+h(d.reviewAsk)+"</p><a class=btn2 target=_blank rel=noopener href='"+h(rv)+"'>"+h(d.reviewBtn)+"</a>"}
+  var s=$("co");
+  s.innerHTML="<p class=lt>"+h(d.coTitle)+"</p><div class='ct serif'>"+esc(CFG.checkout_time||TODO)+"</div><p class=qn>"+h(d.coNote)+"</p><div class=cl>"+
+    list.map(function(it){return "<button class=ck data-ck='"+h(it[4])+"' aria-pressed="+!!ck[it[4]]+"><i></i><span><b>"+h(it[0])+"</b><small>"+esc(it[1])+"</small></span></button>"}).join("")+
+    "</div>"+r+"<button class=chip id=coX>"+h(d.qrClose)+"</button>";
+  s.style.display="flex"}
+/* 날씨: 실패하면 조용히 숨김 */
+var WX={ko:["맑음","구름 조금","흐림","안개","이슬비","비","눈","소나기","뇌우"],en:["Clear","Partly cloudy","Cloudy","Fog","Drizzle","Rain","Snow","Showers","Thunderstorm"],ja:["晴れ","晴れ時々曇り","曇り","霧","霧雨","雨","雪","にわか雨","雷雨"],zh:["晴","少云","多云","雾","毛毛雨","雨","雪","阵雨","雷雨"]},WXD=null;
+function wxIdx(c){return c===0?0:c<=2?1:c===3?2:c<=48?3:c<=57?4:c<=67?5:c<=77?6:c<=82?7:c<=86?6:8}
+function showWx(){var e=$("wx");if(!e)return;e.innerHTML=WXD?"<span class=wl>"+h((WX[L]||WX.en)[wxIdx(WXD.c)])+"</span> "+Math.round(WXD.t)+"°":""}
+function loadWx(){
+  var la=parseFloat(CFG.weather_lat),lo=parseFloat(CFG.weather_lon);if(isNaN(la)||isNaN(lo)){WXD=null;showWx();return}
+  fetch("https://api.open-meteo.com/v1/forecast?latitude="+la+"&longitude="+lo+"&current=temperature_2m,weather_code&timezone=Asia%2FSeoul",{cache:"no-store"})
+    .then(function(r){if(!r.ok)throw new Error("http");return r.json()})
+    .then(function(j){var c=j&&j.current;if(!c||typeof c.temperature_2m!=="number")throw new Error("shape");WXD={t:c.temperature_2m,c:c.weather_code|0};showWx()})
+    .catch(function(){WXD=null;showWx()})}
 
 /* ---------- 시트 읽기 ---------- */
 function csv(t){var rows=[],r=[],c="",q=false;
@@ -441,7 +490,8 @@ function apply(raw,src){
     o.tiles=menus.map(function(m){return {id:m.id,t:f(m,"title"),s:tr(f(m,"sub")),sos:yes2(m.sos)}});
     o.sec={};menus.forEach(function(m){o.sec[m.id]={d:tr(f(m,"desc")),taxi:yes2(m.taxi),i:[]}});
     items.forEach(function(it){var s=o.sec[it.menu];if(!s)return;
-      s.i.push([f(it,"title"),tr(f(it,"body")),(it.type==="긴급번호"||it.type==="hot")?1:0,cleanUrl(tr(it.url)),it.id])});
+      s.i.push([f(it,"title"),tr(f(it,"body")),(it.type==="긴급번호"||it.type==="hot")?1:0,cleanUrl(tr(it.url)),it.id,
+        (it.type==="그룹"||it.type==="group")?"g":"",it.action||"",it.langs||"",yes2(it.checklist)])});
     o.slides=slides.filter(function(s){return !(yes2(s.photo_only)&&!IMG[s.image_key])}).map(function(s){return {t:f(s,"title"),c:f(s,"caption"),img:s.image_key,tod:s.tod,art:s.art}});
     D[l]=o});
   W={};raw.welcome.filter(function(r){return yes(r.show)}).forEach(function(r){W[r.code]={n:r.name,l:r.lang,g:r.greeting,s:r.sub,b:r.button}});
@@ -449,6 +499,7 @@ function apply(raw,src){
   SRC=src;
   if(!D[L])L="en";
   render();idleReset(true);
+  if(!WXD)loadWx();
 }
 
 /* ---------- 화면 ---------- */
@@ -460,6 +511,7 @@ function render(){
   $("brand").innerHTML=h(d.brand)+"<small>"+h(d.sub)+"</small>";
   document.querySelectorAll("[data-l]").forEach(function(x){x.setAttribute("aria-pressed",x.dataset.l===L)});
   $("langBtn").textContent=d.langBtn;
+  $("sosBtn").textContent=d.sosBtn||"SOS";showWx();
   var hb=(V==="home"&&IMG.home_bg);
   $("app").classList.toggle("hb",!!hb);
   if(hb){document.body.style.setProperty("--hbg",bgcss(IMG.home_bg));document.body.classList.add("hasbg")}
@@ -473,12 +525,18 @@ function render(){
     QR=[];
     var t=d.tiles.filter(function(x){return x.id===V})[0],s=d.sec[V];
     if(!t){V="home";return render()}
-    m.innerHTML="<div class=view><div class=side><div><h1 class=serif>"+h(t.t)+"</h1><p>"+esc(s.d)+"</p></div>"+((V==="play"||V==="course")?"<div class=sideart aria-hidden=true>"+getArt(V==="play"?"point":"stone")+"</div>":"")+"<button class=back data-v=home>← "+h(d.home)+"</button></div><div class=list>"+
-    s.i.map(function(it){var hot=it[2],qb="";
+    var pins=[],list=s.i.map(function(it){var hot=it[2],qb="";
+      if(it[5]==="g")return "<h4 class=grp>"+h(it[0])+"</h4>";
+      if(hot){pins.push(it);return ""}
       if(it[3])qb=linkBtn(it[3],it[0],window.MJ_TV?d.qrBtn:(/google\.[a-z.]+\/maps/.test(it[3])&&d.gmapBtn||d.openBtn||d.qrBtn),"btn2");
-      var nu=(!hot&&window.MJ_NAVER_URL)?MJ_NAVER_URL(it[4]):"",nvb=nu?linkBtn(nu,it[0],MJ_NAVER_LABEL(L),"btn2 nv"):"";
-      if(hot||!window.MJ_MEDIA)return "<div class='item"+(hot?" hot":"")+"'>"+(hot?"<div class=big>"+telBig(it[0])+"</div><p>"+body(it[1])+"</p>":"<h3 class=serif>"+h(it[0])+"</h3><p>"+body(it[1])+"</p>"+qb)+"</div>";
-      return "<div class='item media'>"+MJ_MEDIA(it[4],it[0],L)+"<div class=tx><h3 class=serif>"+h(it[0])+"</h3><p>"+body(it[1])+"</p><div class=acts>"+nvb+qb+"</div></div></div>"}).join("")+(V==="eat"&&window.MJ_CREDIT?MJ_CREDIT(L):"")+
+      var nu=window.MJ_NAVER_URL?MJ_NAVER_URL(it[4]):"",nvb=nu?linkBtn(nu,it[0],MJ_NAVER_LABEL(L),"btn2 nv"):"";
+      var ex=langLine(it[7],d)+action(it[6],d);
+      if(!window.MJ_MEDIA)return "<div class=item><h3 class=serif>"+h(it[0])+"</h3><p>"+body(it[1])+"</p>"+ex+qb+"</div>";
+      return "<div class='item media'>"+MJ_MEDIA(it[4],it[0],L)+"<div class=tx><h3 class=serif>"+h(it[0])+"</h3><p>"+body(it[1])+"</p>"+ex+"<div class=acts>"+nvb+qb+"</div></div></div>"}).join("");
+    /* 긴급번호는 스크롤되지 않는 왼쪽 열(모바일은 상단)에 고정 */
+    var pin=pins.length?"<div class=pin>"+pins.map(function(it){return "<div><span class=big>"+telBig(it[0])+"</span><span>"+h(it[1])+"</span></div>"}).join("")+"</div>":"";
+    m.innerHTML="<div class=view><div class=side><div><h1 class=serif>"+h(t.t)+"</h1><p>"+esc(s.d)+"</p>"+pin+"</div>"+((V==="play"||V==="course")?"<div class=sideart aria-hidden=true>"+getArt(V==="play"?"point":"stone")+"</div>":"")+"<button class=back data-v=home>← "+h(d.home)+"</button></div><div class=list>"+
+    list+(V==="eat"&&window.MJ_CREDIT?MJ_CREDIT(L):"")+(V==="guide"&&window.MJ_MUSIC_CREDIT?MJ_MUSIC_CREDIT(L):"")+
     (s.taxi?"<div class=item><button class=btn2 id=taxiOpen>"+h(d.taxiBtn)+"</button></div>":"")+"</div></div>";
     var l=m.querySelector(".list");if(l)l.scrollTop=keep;
   }
@@ -549,7 +607,7 @@ function idleReset(quiet){
 }
 function startIdle(){
   if(!D[L]||!D[L].slides.length)return;
-  $("taxi").style.display="none";$("qr").style.display="none";setTod();
+  $("taxi").style.display="none";$("qr").style.display="none";$("co").style.display="none";setTod();
   var i=$("idle");i.style.display="flex";clearInterval(slideT);
   function pick(){var all=D[L].slides,t=todName(),m=all.filter(function(s){return s.tod===t});return m.length?m:all.filter(function(s){return !s.tod})}
   function show(){
@@ -573,6 +631,11 @@ document.addEventListener("click",function(e){
   else if(b&&b.id==="setClear"){G={n:"",c:""};store();openSet()}
   else if(b&&b.id==="setX")$("set").style.display="none";
   else if(b&&b.id==="setSync"){b.textContent="…";load().then(function(){openSet()})}
+  else if(b&&b.id==="sosBtn"){["qr","co","lang","taxi"].forEach(function(i){$(i).style.display="none"});go("care")}
+  else if(b&&b.id==="coOpen")openCo();
+  else if(b&&b.id==="coX")$("co").style.display="none";
+  else if(b&&b.dataset.ck){var ck=ckState(),k=b.dataset.ck;ck[k]=!ck[k];try{localStorage.setItem("mj_ck",JSON.stringify(ck))}catch(err){}b.setAttribute("aria-pressed",!!ck[k])}
+  else if(b&&b.dataset.copy)copyText(CFG[b.dataset.copy]||"",b,D[L]);
   else if(b&&b.dataset.qr!==undefined)openQr(+b.dataset.qr);
   else if(b&&b.dataset.v)go(b.dataset.v);
   else if(b&&b.dataset.l){L=b.dataset.l;langSet=true;$("lang").style.display="none";render()}
@@ -593,7 +656,7 @@ document.addEventListener("visibilitychange",function(){if(!document.hidden)refr
   if(raw)apply(raw,"저장된 시트 사본");
   (SHEET?load().then(function(ok){if(!ok&&!raw)return loadData()}):loadData())
     .catch(function(){apply(SNAP,"내장 비상 정보")})
-    .then(function(){setInterval(refresh,Math.max(30,parseInt(CFG.refresh_seconds)||300)*1000)});
+    .then(function(){setInterval(loadWx,30*60*1000);setInterval(refresh,Math.max(30,parseInt(CFG.refresh_seconds)||300)*1000)});
 })();
 
 </script>
@@ -686,6 +749,43 @@ window.MJ_NAVER=function(id,lang){var q=NV[id];if(!q)return "";return "<a class=
 window.MJ_CREDIT=function(lang){return "<p class=cr>"+CR[lang]+"</p>"};
 })();
 </script>
+<style id="feature-css">
+/* ---- 이용 안내 그룹 제목: 작은 자간 글씨, 선은 다음 항목이 그린다 ---- */
+.grp{margin:0;padding:44px 4px 12px;font-weight:300;font-size:.72em;letter-spacing:.32em;color:var(--mute)}
+.list>.grp:first-child{padding-top:4px}
+.lgs{margin:8px 0 0!important;font-size:.8em!important;letter-spacing:.06em;color:var(--accent)!important}
+/* ---- 긴급번호 고정 (왼쪽 열 / 모바일 상단) ---- */
+.pin{display:flex;flex-wrap:wrap;margin-top:28px;border-top:1px solid var(--alert)}
+.pin>div{flex:1 1 64px;padding:16px 4px 0;display:flex;flex-direction:column;gap:2px;min-width:0}
+.pin .big{font-size:1.7em;font-weight:300;line-height:1.15;color:var(--alert)}
+.pin span:not(.big){font-size:.68em;line-height:1.4;color:var(--mute)}
+/* ---- 상단: 긴급 버튼과 날씨 ---- */
+.tools .chip.sosb{color:var(--alert);opacity:1}
+#wx{position:absolute;top:0;left:0;min-height:44px;display:flex;align-items:center;padding:0 10px;font-size:.78em;letter-spacing:.08em;color:var(--mute);z-index:2}
+#wx:empty{display:none}
+@media (max-width:480px){#wx .wl{display:none}#wx{padding:0 6px}}
+/* ---- Wi-Fi·후기 QR (TV) ---- */
+.wq{display:flex;align-items:center;gap:24px;margin-top:16px}
+.wq .qrbox{width:220px;flex:none;background:#f6f2e9;padding:10px;border:1px solid var(--line)}
+.wq .qrbox svg{display:block;width:100%;height:auto}
+.wq p{margin:0;color:var(--mute);font-size:.85em}
+/* ---- 체크아웃 화면 ---- */
+#co{position:fixed;inset:0;display:none;z-index:46;background:var(--bg);flex-direction:column;align-items:center;justify-content:center;gap:clamp(8px,1.6vh,16px);text-align:center;overflow-y:auto;padding:max(clamp(20px,4vw,56px),env(safe-area-inset-top,0px)) max(clamp(20px,4vw,56px),env(safe-area-inset-right,0px)) max(clamp(20px,4vw,56px),env(safe-area-inset-bottom,0px)) max(clamp(20px,4vw,56px),env(safe-area-inset-left,0px))}
+#co .lt{margin:0;color:var(--mute);letter-spacing:.4em;font-size:.8em}
+#co .ct{font-family:var(--ff);font-weight:300;font-size:clamp(48px,8vw,96px);letter-spacing:.12em;line-height:1.1}
+#co .qn{margin:0;color:var(--mute);font-size:.85em;letter-spacing:.04em}
+#co .cl{width:min(640px,100%);margin:clamp(8px,2vh,24px) 0;border-top:1px solid var(--line);text-align:left}
+#co .ck{display:flex;gap:18px;align-items:flex-start;width:100%;text-align:left;padding:18px 4px;border-bottom:1px solid var(--line)}
+#co .ck i{position:relative;flex:none;width:22px;height:22px;margin-top:5px;border:1px solid var(--ink)}
+#co .ck[aria-pressed="true"] i::after{content:"";position:absolute;left:6px;top:1px;width:7px;height:13px;border:solid var(--accent);border-width:0 2px 2px 0;transform:rotate(45deg)}
+#co .ck[aria-pressed="true"] span{opacity:.5}
+#co .ck b{display:block;font-family:var(--ff);font-weight:400;letter-spacing:.08em}
+#co .ck small{display:block;font-size:.82em;color:var(--mute);white-space:pre-line}
+#co .wq{justify-content:center}
+#co .chip{margin-top:6px;min-width:140px;min-height:60px}
+@supports not (inset:0){#co{top:0;right:0;bottom:0;left:0}}
+@media (max-width:760px){.pin .big{font-size:1.45em}#co{justify-content:flex-start}}
+</style>
 <style id="tv-css">
 /* ---- 링크·전화 (휴대폰/PC) ---- */
 a.btn2{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;color:var(--ink)}
@@ -720,6 +820,11 @@ html.tv #lang .lo{min-height:100px}
 html.tv #lang .lc{min-width:88px;min-height:88px}
 html.tv #qr .qrbox{width:min(52vh,70vw,520px)}
 html.tv .phoneqr .qrbox{width:180px}
+html.tv #wx{min-height:72px;font-size:.85em;padding:0 18px}
+html.tv .wq .qrbox{width:300px}
+html.tv #co .ck{padding:22px 4px}
+html.tv #co .ck i{width:28px;height:28px}
+html.tv #co .ck[aria-pressed="true"] i::after{left:8px;top:2px;width:9px;height:16px}
 </style>
 <script id="tv-js">
 /* ===== 리모컨: 방향키 공간 내비게이션 · 확인 · 뒤로가기(461 / Backspace / Esc) ===== */

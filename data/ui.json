@@ -158,5 +158,117 @@
     "ja": "スマートフォンで見る",
     "zh": "在手机上查看",
     "desc": "TV 홈 화면의 QR 아래 문구"
+  },
+  {
+    "key": "sosBtn",
+    "ko": "긴급",
+    "en": "SOS",
+    "ja": "緊急",
+    "zh": "紧急",
+    "desc": "상단 긴급 버튼 (병원·긴급 화면으로 이동)"
+  },
+  {
+    "key": "wifiScan",
+    "ko": "휴대폰 카메라로 스캔하면 바로 연결됩니다",
+    "en": "Scan with your phone camera to connect",
+    "ja": "スマートフォンのカメラで読み取ると接続できます",
+    "zh": "用手机相机扫描即可连接",
+    "desc": "TV Wi-Fi QR 안내"
+  },
+  {
+    "key": "copyName",
+    "ko": "이름 복사",
+    "en": "Copy name",
+    "ja": "名前をコピー",
+    "zh": "复制名称",
+    "desc": "Wi-Fi 이름 복사 버튼"
+  },
+  {
+    "key": "copyPw",
+    "ko": "비밀번호 복사",
+    "en": "Copy password",
+    "ja": "パスワードをコピー",
+    "zh": "复制密码",
+    "desc": "Wi-Fi 비밀번호 복사 버튼"
+  },
+  {
+    "key": "copied",
+    "ko": "복사했습니다",
+    "en": "Copied",
+    "ja": "コピーしました",
+    "zh": "已复制",
+    "desc": "복사 완료 표시"
+  },
+  {
+    "key": "kakao",
+    "ko": "카카오톡",
+    "en": "KakaoTalk",
+    "ja": "カカオトーク",
+    "zh": "KakaoTalk",
+    "desc": "호스트 연락 버튼"
+  },
+  {
+    "key": "whatsapp",
+    "ko": "WhatsApp",
+    "en": "WhatsApp",
+    "ja": "WhatsApp",
+    "zh": "WhatsApp",
+    "desc": "호스트 연락 버튼"
+  },
+  {
+    "key": "call",
+    "ko": "전화",
+    "en": "Call",
+    "ja": "電話",
+    "zh": "电话",
+    "desc": "호스트 연락 버튼"
+  },
+  {
+    "key": "coBtn",
+    "ko": "체크아웃 안내 열기",
+    "en": "Open check-out guide",
+    "ja": "チェックアウト案内を開く",
+    "zh": "打开退房指南",
+    "desc": "이용 안내의 체크아웃 화면 버튼"
+  },
+  {
+    "key": "coTitle",
+    "ko": "체크아웃",
+    "en": "Check-out",
+    "ja": "チェックアウト",
+    "zh": "退房",
+    "desc": "체크아웃 화면 제목"
+  },
+  {
+    "key": "coNote",
+    "ko": "떠나기 전에 하나씩 확인해 주세요",
+    "en": "Please check each item before you leave",
+    "ja": "お出かけ前に一つずつご確認ください",
+    "zh": "离开前请逐项确认",
+    "desc": "체크아웃 화면 안내"
+  },
+  {
+    "key": "reviewBtn",
+    "ko": "후기 남기기",
+    "en": "Leave a review",
+    "ja": "レビューを書く",
+    "zh": "留下评价",
+    "desc": "체크아웃 화면 후기 버튼"
+  },
+  {
+    "key": "reviewAsk",
+    "ko": "머문 시간이 좋으셨다면 후기를 남겨 주세요",
+    "en": "If you enjoyed your stay, we'd love a review",
+    "ja": "ご滞在が心地よかったら、レビューをお願いします",
+    "zh": "如果您住得愉快，欢迎留下评价",
+    "desc": "체크아웃 화면 후기 안내"
+  },
+  {
+    "key": "langCare",
+    "ko": "외국어 진료",
+    "en": "Languages",
+    "ja": "外国語診療",
+    "zh": "外语诊疗",
+    "desc": "병원 항목의 외국어 진료 표시"
   }
 ]
