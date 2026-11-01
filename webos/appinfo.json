@@ -1,0 +1,13 @@
+{
+  "id": "com.minujeong.guide",
+  "version": "1.0.0",
+  "vendor": "Minujeong",
+  "type": "web",
+  "main": "index.html",
+  "title": "미누정 게스트 가이드",
+  "icon": "icon-80.png",
+  "largeIcon": "icon-130.png",
+  "bgColor": "#dcd6ca",
+  "resolution": "1920x1080",
+  "disableBackHistoryAPI": true
+}
