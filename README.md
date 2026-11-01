@@ -38,7 +38,8 @@ webos/                  (선택) webOS 앱 패키지 파일
 | `host_kakao` | 카카오톡 ID (본문 표시용) | `@minujeong` |
 | `host_kakao_url` | 카카오톡 채널/오픈채팅 링크 (버튼) | `https://pf.kakao.com/_xxxx` |
 | `host_whatsapp` | WhatsApp 번호, 국가번호 포함 숫자만 | `821012345678` |
-| `checkout_time` | 체크아웃 시간 | `11:00` |
+| `checkin_time` | 체크인 시간 (홈 상단, 비우면 숨김) | `15:00` |
+| `checkout_time` | 체크아웃 시간 (홈 상단·체크아웃 화면) | `11:00` |
 | `review_url` | 후기 링크 (체크아웃 화면) | `https://...` |
 | `site_url` | 가이드 공개 주소 (TV의 "휴대폰에서 보기" QR) | |
 | `idle_seconds` | TV에서 조작이 없을 때 대기화면까지 시간(초) | `120` |

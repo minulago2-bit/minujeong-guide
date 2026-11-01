@@ -36,9 +36,15 @@
     "example": "821012345678"
   },
   {
+    "key": "checkin_time",
+    "value": "15:00",
+    "desc": "체크인 시간 (홈 상단에 표시, 비우면 숨김)",
+    "example": "15:00"
+  },
+  {
     "key": "checkout_time",
-    "value": "",
-    "desc": "체크아웃 시간",
+    "value": "11:00",
+    "desc": "체크아웃 시간 (홈 상단·체크아웃 화면에 표시)",
     "example": "11:00"
   },
   {
