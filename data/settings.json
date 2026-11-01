@@ -1,0 +1,92 @@
+[
+  {
+    "key": "wifi_name",
+    "value": "",
+    "desc": "와이파이 이름 (모든 언어 공통)",
+    "example": "MinuJeong_5G"
+  },
+  {
+    "key": "wifi_pw",
+    "value": "",
+    "desc": "와이파이 비밀번호",
+    "example": "(입력)"
+  },
+  {
+    "key": "host_phone",
+    "value": "",
+    "desc": "호스트 전화번호",
+    "example": "010-0000-0000"
+  },
+  {
+    "key": "host_kakao",
+    "value": "",
+    "desc": "카카오톡 채널/ID",
+    "example": "@minujeong"
+  },
+  {
+    "key": "checkout_time",
+    "value": "",
+    "desc": "체크아웃 시간",
+    "example": "11:00"
+  },
+  {
+    "key": "review_url",
+    "value": "",
+    "desc": "후기 링크 (짧은 URL 권장)",
+    "example": "https://..."
+  },
+  {
+    "key": "default_lang",
+    "value": "en",
+    "desc": "처음 켜질 때 언어 (ko/en/ja/zh)",
+    "example": "en"
+  },
+  {
+    "key": "idle_seconds",
+    "value": "120",
+    "desc": "터치 없을 때 대기화면으로 넘어가는 시간(초)",
+    "example": "120"
+  },
+  {
+    "key": "slide_seconds",
+    "value": "8",
+    "desc": "대기화면 컷 전환 간격(초)",
+    "example": "8"
+  },
+  {
+    "key": "refresh_seconds",
+    "value": "300",
+    "desc": "시트 변경을 가져오는 주기(초). 최소 30",
+    "example": "300"
+  },
+  {
+    "key": "taxi_addr_ko",
+    "value": "서울 종로구 옥인동 1-3 (미누정)",
+    "desc": "택시 기사님께 보여주는 한글 주소",
+    "example": ""
+  },
+  {
+    "key": "taxi_addr_en",
+    "value": "Minujeong, 1-3 Ogin-dong, Jongno-gu, Seoul",
+    "desc": "택시 카드 영문 주소",
+    "example": ""
+  },
+  {
+    "key": "property_id",
+    "value": "minujeong",
+    "desc": "숙소 식별용 메모 (화면에 안 보임)",
+    "example": ""
+  },
+  {
+    "key": "airbnb_exp_url",
+    "value": "https://www.airbnb.com/s/Seoul--South-Korea/experiences",
+    "desc": "에어비앤비 체험 서울 전체 주소 ('놀거리' 첫 항목이 사용)",
+    "example": "https://www.airbnb.com/s/Seoul--South-Korea/experiences"
+  },
+  {
+    "key": "home_art",
+    "value": "line",
+    "desc": "홈 하단 그림: line / point / dialogue / stone (이우환풍), charcoal / brush (이배풍), none",
+    "example": "line"
+  }
+]

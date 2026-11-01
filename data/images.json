@@ -1,0 +1,92 @@
+[
+  {
+    "key": "home_bg",
+    "screen": "홈 배경",
+    "content": "한쪽을 비운 대표 컷 1장",
+    "guide": "오버레이 40~60%, 텍스트 영역 확보",
+    "url": "",
+    "alt": "",
+    "status": "미촬영"
+  },
+  {
+    "key": "idle_1",
+    "screen": "대기화면 1 · 경복궁",
+    "content": "경복궁 사진 (필수. 사진이 있어야 이 슬라이드가 표시됩니다)",
+    "guide": "어두운 톤, 한쪽을 비운 구도",
+    "url": "",
+    "alt": "",
+    "status": "미촬영"
+  },
+  {
+    "key": "idle_2",
+    "screen": "대기화면 2 · 창경궁",
+    "content": "창경궁 사진 (필수. 사진이 있어야 이 슬라이드가 표시됩니다)",
+    "guide": "어두운 톤, 한쪽을 비운 구도",
+    "url": "",
+    "alt": "",
+    "status": "미촬영"
+  },
+  {
+    "key": "idle_3",
+    "screen": "대기화면 3 · 서촌",
+    "content": "서촌 골목 또는 미누정 처마",
+    "guide": "따뜻한 톤 소량",
+    "url": "",
+    "alt": "",
+    "status": "미촬영"
+  },
+  {
+    "key": "idle_4",
+    "screen": "대기화면 4 · 한지",
+    "content": "한지 창호의 빛",
+    "guide": "웜 그레이, 낮은 채도",
+    "url": "",
+    "alt": "",
+    "status": "미촬영"
+  },
+  {
+    "key": "menu_guide",
+    "screen": "이용 안내",
+    "content": "문살·문고리·이불 결 디테일",
+    "guide": "작게, 클로즈업",
+    "url": "",
+    "alt": "",
+    "status": "미촬영"
+  },
+  {
+    "key": "menu_eat",
+    "screen": "맛집",
+    "content": "나무 상·도자기·빛",
+    "guide": "음식 사진 쓰지 않음",
+    "url": "",
+    "alt": "",
+    "status": "미촬영"
+  },
+  {
+    "key": "menu_course",
+    "screen": "여행 코스",
+    "content": "처마 너머 북악산·궁 담장 실루엣",
+    "guide": "미누정 위치 강점",
+    "url": "",
+    "alt": "",
+    "status": "미촬영"
+  },
+  {
+    "key": "menu_culture",
+    "screen": "한국 문화",
+    "content": "다기·한지·붓 클로즈업",
+    "guide": "한자·단청 장식 제외",
+    "url": "",
+    "alt": "",
+    "status": "미촬영"
+  },
+  {
+    "key": "menu_out",
+    "screen": "체크아웃",
+    "content": "아침 빛이 든 툇마루",
+    "guide": "마지막 인상",
+    "url": "",
+    "alt": "",
+    "status": "미촬영"
+  }
+]

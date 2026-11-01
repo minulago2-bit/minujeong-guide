@@ -1,0 +1,92 @@
+[
+  {
+    "code": "ko",
+    "show": "Y",
+    "name": "한국어",
+    "lang": "ko",
+    "greeting": "{n}님, 환영합니다",
+    "sub": "미누정에서의 시간이 오래 기억에 남기를 바랍니다. 편히 쉬다 가세요.",
+    "button": "시작하기"
+  },
+  {
+    "code": "en",
+    "show": "Y",
+    "name": "English",
+    "lang": "en",
+    "greeting": "Welcome, {n}",
+    "sub": "We’re delighted to have you at Minujeong Hanok. Please make yourself at home.",
+    "button": "Start"
+  },
+  {
+    "code": "ja",
+    "show": "Y",
+    "name": "日本語",
+    "lang": "ja",
+    "greeting": "{n}様、ようこそ",
+    "sub": "ミヌジョンでのひとときが、心に残る時間になりますように。どうぞごゆっくりお過ごしください。",
+    "button": "はじめる"
+  },
+  {
+    "code": "zh",
+    "show": "Y",
+    "name": "中文(简体)",
+    "lang": "zh-CN",
+    "greeting": "欢迎您，{n}",
+    "sub": "愿您在 Minujeong 韩屋度过难忘的时光。请像在家一样放松。",
+    "button": "开始"
+  },
+  {
+    "code": "tw",
+    "show": "Y",
+    "name": "中文(繁體)",
+    "lang": "zh-TW",
+    "greeting": "歡迎您，{n}",
+    "sub": "願您在 Minujeong 韓屋度過難忘的時光。請像在家一樣放鬆。",
+    "button": "開始"
+  },
+  {
+    "code": "es",
+    "show": "Y",
+    "name": "Español",
+    "lang": "es",
+    "greeting": "¡Bienvenido/a, {n}!",
+    "sub": "Nos alegra tenerte en Minujeong Hanok. Siéntete como en casa.",
+    "button": "Empezar"
+  },
+  {
+    "code": "fr",
+    "show": "Y",
+    "name": "Français",
+    "lang": "fr",
+    "greeting": "Bienvenue, {n}",
+    "sub": "Nous sommes ravis de vous accueillir à Minujeong Hanok. Faites comme chez vous.",
+    "button": "Commencer"
+  },
+  {
+    "code": "de",
+    "show": "Y",
+    "name": "Deutsch",
+    "lang": "de",
+    "greeting": "Willkommen, {n}",
+    "sub": "Wir freuen uns, Sie im Minujeong Hanok zu begrüßen. Fühlen Sie sich wie zu Hause.",
+    "button": "Los geht’s"
+  },
+  {
+    "code": "th",
+    "show": "Y",
+    "name": "ไทย",
+    "lang": "th",
+    "greeting": "ยินดีต้อนรับ คุณ{n}",
+    "sub": "ขอให้การพักที่ Minujeong Hanok เป็นความทรงจำที่ดี ทำตัวตามสบายได้เลย",
+    "button": "เริ่มเลย"
+  },
+  {
+    "code": "vi",
+    "show": "Y",
+    "name": "Tiếng Việt",
+    "lang": "vi",
+    "greeting": "Chào mừng {n}",
+    "sub": "Chúc bạn có khoảng thời gian đáng nhớ tại Minujeong Hanok. Cứ thoải mái như ở nhà nhé.",
+    "button": "Bắt đầu"
+  }
+]

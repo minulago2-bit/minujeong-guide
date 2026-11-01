@@ -1,0 +1,138 @@
+[
+  {
+    "key": "brand",
+    "ko": "미누정",
+    "en": "Minujeong",
+    "ja": "ミヌジョン",
+    "zh": "Minujeong",
+    "desc": "브랜드명 (헤더 로고)"
+  },
+  {
+    "key": "sub",
+    "ko": "Minujeong Hanok · 게스트 가이드",
+    "en": "Minujeong Hanok · Guest Guide",
+    "ja": "Minujeong Hanok · ゲストガイド",
+    "zh": "韩屋 · 住客指南",
+    "desc": "로고 아래 작은 글씨"
+  },
+  {
+    "key": "home",
+    "ko": "처음으로",
+    "en": "Home",
+    "ja": "ホーム",
+    "zh": "返回首页",
+    "desc": "처음으로 버튼"
+  },
+  {
+    "key": "taxiBtn",
+    "ko": "택시 기사님께 보여주기",
+    "en": "Show to taxi driver",
+    "ja": "タクシー運転手に見せる",
+    "zh": "给出租车司机看",
+    "desc": "택시 버튼 문구"
+  },
+  {
+    "key": "taxiTxt",
+    "ko": "이 주소로 가 주세요",
+    "en": "Please take me to this address",
+    "ja": "この住所までお願いします",
+    "zh": "请送我到这个地址",
+    "desc": "택시 카드 안내문"
+  },
+  {
+    "key": "taxiClose",
+    "ko": "닫기",
+    "en": "Close",
+    "ja": "閉じる",
+    "zh": "关闭",
+    "desc": "택시 카드 닫기"
+  },
+  {
+    "key": "touch",
+    "ko": "화면을 터치하면 가이드로 돌아갑니다",
+    "en": "Touch the screen to return to the guide",
+    "ja": "画面に触れるとガイドに戻ります",
+    "zh": "触摸屏幕即可返回指南",
+    "desc": "대기화면 안내 문구"
+  },
+  {
+    "key": "langBtn",
+    "ko": "언어 · 한국어",
+    "en": "Language · English",
+    "ja": "言語 · 日本語",
+    "zh": "语言 · 中文",
+    "desc": "상단 언어 버튼 표기"
+  },
+  {
+    "key": "honorific",
+    "ko": "님",
+    "en": "",
+    "ja": "様",
+    "zh": "",
+    "desc": "이름 뒤 호칭 (님/様)"
+  },
+  {
+    "key": "greet_0",
+    "ko": "좋은 아침입니다",
+    "en": "Good morning",
+    "ja": "おはようございます",
+    "zh": "早上好",
+    "desc": "인사 · 아침 (05–11시)"
+  },
+  {
+    "key": "greet_1",
+    "ko": "좋은 오후입니다",
+    "en": "Good afternoon",
+    "ja": "こんにちは",
+    "zh": "下午好",
+    "desc": "인사 · 오후 (11–17시)"
+  },
+  {
+    "key": "greet_2",
+    "ko": "편안한 저녁입니다",
+    "en": "Good evening",
+    "ja": "こんばんは",
+    "zh": "晚上好",
+    "desc": "인사 · 저녁 (17–21시)"
+  },
+  {
+    "key": "greet_3",
+    "ko": "고요한 밤입니다",
+    "en": "Good night",
+    "ja": "おやすみなさい",
+    "zh": "晚安",
+    "desc": "인사 · 밤 (21–05시)"
+  },
+  {
+    "key": "qrBtn",
+    "ko": "휴대폰으로 열기",
+    "en": "Open on your phone",
+    "ja": "スマートフォンで開く",
+    "zh": "用手机打开",
+    "desc": "링크가 있는 카드의 QR 버튼"
+  },
+  {
+    "key": "qrHint",
+    "ko": "휴대폰 카메라로 QR 코드를 스캔하세요.",
+    "en": "Scan the QR code with your phone camera.",
+    "ja": "スマートフォンのカメラでQRコードを読み取ってください。",
+    "zh": "请用手机相机扫描二维码。",
+    "desc": "QR 화면 안내"
+  },
+  {
+    "key": "qrNote",
+    "ko": "연결된 페이지가 휴대폰에서 열립니다.",
+    "en": "The linked page opens on your phone.",
+    "ja": "リンク先がスマートフォンで開きます。",
+    "zh": "链接页面将在手机上打开。",
+    "desc": "QR 화면 보조 문구"
+  },
+  {
+    "key": "qrClose",
+    "ko": "닫기",
+    "en": "Close",
+    "ja": "閉じる",
+    "zh": "关闭",
+    "desc": "QR 화면 닫기"
+  }
+]
