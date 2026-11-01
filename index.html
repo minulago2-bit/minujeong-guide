@@ -816,7 +816,13 @@ btn(false);
 /* ---- 환영 화면: 작은 머리말 · 이름 인사 · 브랜드 · 두 줄 안내 · 시작 · (TV) 조작 안내 ---- */
 /* 하단 그림이 화면 밖으로 넘쳐 모바일 페이지가 가로로 넓어지던 문제: 보이는 모습은 그대로 두고 잘라 낸다 */
 .homeart{overflow:hidden}
-#wel{cursor:pointer}
+/* 환영 화면은 홈과 같은 밝은 배경·글자색 */
+#wel{cursor:pointer;color:var(--ink);background-color:var(--bg);background-image:radial-gradient(95% 62% at 14% -10%,var(--gx),transparent 72%),radial-gradient(85% 58% at 100% 108%,var(--gy),transparent 72%),linear-gradient(172deg,var(--panel) 0%,var(--bg) 54%,color-mix(in srgb,var(--bg) 80%,var(--ink)) 100%)}
+@supports not (color:color-mix(in srgb,red,blue)){#wel{background-image:radial-gradient(95% 62% at 14% -10%,var(--gx),transparent 72%),radial-gradient(85% 58% at 100% 108%,var(--gy),transparent 72%),linear-gradient(172deg,var(--panel) 0%,var(--bg) 54%,rgb(var(--fx-mix)) 100%)}}
+#wel::before{background:var(--accent);opacity:.8}
+#wel .chip{color:var(--ink);border-color:var(--ink)}
+#wel .we{color:var(--accent);opacity:1}
+#wel .ws,#wel .wh{color:var(--mute);opacity:1}
 #wel .we{font-size:.8em;letter-spacing:.42em;opacity:.7}
 #wel .wb{font-size:1.25em;letter-spacing:.5em;opacity:.9;margin-top:-6px}
 #wel>*{max-width:100%;box-sizing:border-box}
