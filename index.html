@@ -250,6 +250,21 @@ main.home{overflow-y:auto}
 </style>
 
 
+<script>
+/* ---------- 기기 구분: 화면 크기·입력 방식 위주, webOS UA 보조. ?tv=1 / ?tv=0 으로 강제 ---------- */
+(function(){
+  var p="",r=document.documentElement,mm=function(q){try{return matchMedia(q).matches}catch(e){return false}};
+  try{p=new URLSearchParams(location.search).get("tv")||""}catch(e){}
+  var webos=/web0s|webos|netcast/i.test(navigator.userAgent);
+  var sw=screen.width||innerWidth,sh=screen.height||innerHeight;
+  var big=Math.min(sw,sh)>=1060&&Math.max(sw,sh)>=1800;
+  var touchOnly=mm("(pointer:coarse)")||mm("(hover:none)");
+  var tv=p==="1"||(p!=="0"&&(webos||(big&&touchOnly)));
+  window.MJ_TV=tv;
+  window.MJ_TOUCH=!tv&&(touchOnly||mm("(any-pointer:coarse)"));
+  if(tv)r.className+=" tv";
+})();
+</script>
 <div id="app">
   
     <div class="brand serif" id="brand"></div>
@@ -341,10 +356,18 @@ if(SHEET==="__SHEET_ID__")SHEET="";
 var D={},W={},CFG={},IMG={},SRC="내장 스냅샷",SYNC="",LAST="",L="en",V="home",idleT,slideT,si=0,langSet=false;
 var G={n:"",c:""},taps=0,tapT,QR=[];
 try{var sv=localStorage.getItem("mj_guest");if(sv)G=JSON.parse(sv)}catch(err){}
+try{var lp=new URLSearchParams(location.search).get("lang");if(lp&&LANGS.indexOf(lp)>=0){L=lp;langSet=true}}catch(err){}
 var $=function(i){return document.getElementById(i)};
 function store(){try{localStorage.setItem("mj_guest",JSON.stringify(G))}catch(err){}}
 function h(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]})}
 function esc(s){return h(s).split(TODO).join("<span class=todo>"+TODO+"</span>")}
+/* 링크: TV에서는 QR 화면을 여는 버튼, 그 밖에서는 바로 여는 링크 */
+function linkBtn(u,t,label,cls){
+  if(window.MJ_TV){QR.push({u:u,t:t});return "<button class='"+cls+"' data-qr="+(QR.length-1)+">"+h(label)+"</button>"}
+  return "<a class='"+cls+"' target=_blank rel=noopener href='"+h(u)+"'>"+h(label)+"</a>"}
+/* 본문 속 전화번호는 TV가 아닐 때 tel: 링크로 */
+function body(s){var x=esc(s);return window.MJ_TV?x:x.replace(/(^|[^\d-])(0\d{1,2}-\d{3,4}-\d{4})(?![\d-])/g,"$1<a class=tel href='tel:$2'>$2</a>")}
+function telBig(n){return !window.MJ_TV&&/^\d{3,4}$/.test(n)?"<a class=tel href='tel:"+n+"'>"+h(n)+"</a>":h(n)}
 
 /* ---------- 시트 읽기 ---------- */
 function csv(t){var rows=[],r=[],c="",q=false;
@@ -412,7 +435,8 @@ function apply(raw,src){
   D={};
   LANGS.forEach(function(l){
     var o={},f=function(r,k){return r[k+"_"+l]||r[k+"_en"]||""};
-    ["brand","sub","home","taxiBtn","taxiTxt","taxiClose","touch","langBtn","honorific","qrBtn","qrHint","qrNote","qrClose"].forEach(function(k){o[k]=ui[k]?(ui[k][l]||ui[k].en||""):""});
+    raw.ui.forEach(function(r){if(r.key)o[r.key]=r[l]||r.en||""});
+    ["brand","sub","home","taxiBtn","taxiTxt","taxiClose","touch","langBtn","honorific","qrBtn","qrHint","qrNote","qrClose"].forEach(function(k){if(o[k]==null)o[k]=""});
     o.greet=[0,1,2,3].map(function(i){return ui["greet_"+i]?(ui["greet_"+i][l]||ui["greet_"+i].en||""):""});
     o.tiles=menus.map(function(m){return {id:m.id,t:f(m,"title"),s:tr(f(m,"sub")),sos:yes2(m.sos)}});
     o.sec={};menus.forEach(function(m){o.sec[m.id]={d:tr(f(m,"desc")),taxi:yes2(m.taxi),i:[]}});
@@ -444,22 +468,26 @@ function render(){
   m.className=V==="home"?"home":"";
   if(V==="home"){
     m.innerHTML=greet()+"<div class=grid>"+d.tiles.map(function(t){
-      return "<button class='tile"+(t.sos?" sos":"")+"' data-v='"+h(t.id)+"'><b class=serif>"+h(t.t)+"</b><span>"+h(t.s)+"</span></button>"}).join("")+"</div>"+(hb?"":"<div class=homeart aria-hidden=true>"+getArt(CFG.home_art||"line")+"</div>");
+      return "<button class='tile"+(t.sos?" sos":"")+"' data-v='"+h(t.id)+"'><b class=serif>"+h(t.t)+"</b><span>"+h(t.s)+"</span></button>"}).join("")+"</div>"+(hb?"":"<div class=homeart aria-hidden=true>"+getArt(CFG.home_art||"line")+"</div>")+(window.MJ_TV?phoneQr(d):"");
   }else{
     QR=[];
     var t=d.tiles.filter(function(x){return x.id===V})[0],s=d.sec[V];
     if(!t){V="home";return render()}
     m.innerHTML="<div class=view><div class=side><div><h1 class=serif>"+h(t.t)+"</h1><p>"+esc(s.d)+"</p></div>"+((V==="play"||V==="course")?"<div class=sideart aria-hidden=true>"+getArt(V==="play"?"point":"stone")+"</div>":"")+"<button class=back data-v=home>← "+h(d.home)+"</button></div><div class=list>"+
     s.i.map(function(it){var hot=it[2],qb="";
-      if(it[3]){QR.push({u:it[3],t:it[0]});qb="<button class=btn2 data-qr="+(QR.length-1)+">"+h(d.qrBtn)+"</button>"}
-      var nvb=(!hot&&window.MJ_NAVER)?MJ_NAVER(it[4],L):"";
-      if(hot||!window.MJ_MEDIA)return "<div class='item"+(hot?" hot":"")+"'>"+(hot?"<div class=big>"+h(it[0])+"</div><p>"+esc(it[1])+"</p>":"<h3 class=serif>"+h(it[0])+"</h3><p>"+esc(it[1])+"</p>"+qb)+"</div>";
-      return "<div class='item media'>"+MJ_MEDIA(it[4],it[0],L)+"<div class=tx><h3 class=serif>"+h(it[0])+"</h3><p>"+esc(it[1])+"</p><div class=acts>"+nvb+qb+"</div></div></div>"}).join("")+(V==="eat"&&window.MJ_CREDIT?MJ_CREDIT(L):"")+
+      if(it[3])qb=linkBtn(it[3],it[0],window.MJ_TV?d.qrBtn:(/google\.[a-z.]+\/maps/.test(it[3])&&d.gmapBtn||d.openBtn||d.qrBtn),"btn2");
+      var nu=(!hot&&window.MJ_NAVER_URL)?MJ_NAVER_URL(it[4]):"",nvb=nu?linkBtn(nu,it[0],MJ_NAVER_LABEL(L),"btn2 nv"):"";
+      if(hot||!window.MJ_MEDIA)return "<div class='item"+(hot?" hot":"")+"'>"+(hot?"<div class=big>"+telBig(it[0])+"</div><p>"+body(it[1])+"</p>":"<h3 class=serif>"+h(it[0])+"</h3><p>"+body(it[1])+"</p>"+qb)+"</div>";
+      return "<div class='item media'>"+MJ_MEDIA(it[4],it[0],L)+"<div class=tx><h3 class=serif>"+h(it[0])+"</h3><p>"+body(it[1])+"</p><div class=acts>"+nvb+qb+"</div></div></div>"}).join("")+(V==="eat"&&window.MJ_CREDIT?MJ_CREDIT(L):"")+
     (s.taxi?"<div class=item><button class=btn2 id=taxiOpen>"+h(d.taxiBtn)+"</button></div>":"")+"</div></div>";
     var l=m.querySelector(".list");if(l)l.scrollTop=keep;
   }
 }
 function go(v){V=v;render()}
+/* TV 홈: 휴대폰에서 같은 가이드를 여는 QR (현재 언어 유지) */
+function siteUrl(){var u=String(CFG.site_url||"").trim();if(!/^https?:\/\//.test(u))u=/^https?:$/.test(location.protocol)?location.origin+location.pathname:"";return u}
+function phoneQr(d){var u=siteUrl();if(!u)return "";var svg=qrSvg(u+(u.indexOf("?")<0?"?":"&")+"lang="+L);
+  return svg?"<div class=phoneqr><div class=qrbox>"+svg+"</div><p>"+h(d.phoneView||d.qrBtn)+"</p></div>":""}
 function setTod(){var hr=new Date().getHours(),k=hr<5?3:hr<11?0:hr<17?1:hr<21?2:3;document.documentElement.setAttribute("data-tod",k);return k}
 function greet(){
   var k=setTod(),d=D[L];
@@ -513,8 +541,9 @@ function saveGuest(){
 function todName(){var hr=new Date().getHours();return hr>=4&&hr<9?"dawn":hr<16?"day":hr<20?"dusk":"night"}
 function idleReset(quiet){
   clearTimeout(idleT);
+  if(!window.MJ_TV)return;
   var i=$("idle");
-  if(quiet!==true&&i.style.display==="flex"){i.style.display="none";clearInterval(slideT);V="home";render();load()}
+  if(quiet!==true&&i.style.display==="flex"){window.MJ_WOKE=Date.now();i.style.display="none";clearInterval(slideT);V="home";render();load()}
   var sec=Math.max(15,parseInt(CFG.idle_seconds)||120);
   idleT=setTimeout(startIdle,sec*1000);
 }
@@ -554,7 +583,7 @@ document.addEventListener("click",function(e){
   else if(b&&b.id==="taxiX")$("taxi").style.display="none";
   else if(b&&b.id==="qrX")$("qr").style.display="none";
 },true);
-["click","touchstart","pointerdown","scroll"].forEach(function(ev){document.addEventListener(ev,function(){idleReset()},true)});
+["click","touchstart","pointerdown","scroll","keydown"].forEach(function(ev){document.addEventListener(ev,function(){idleReset()},true)});
 document.addEventListener("visibilitychange",function(){if(!document.hidden)refresh()});
 
 /* ---------- 시작 ---------- */
@@ -651,8 +680,100 @@ window.MJ_MEDIA=function(id,title,lang){
   if(PH[id]){return "<figure class='im ph'><img loading=lazy decoding=async alt='"+String(title).replace(/'/g,"")+"' src='"+wm(PH[id][0])+"' onerror=\"this.parentNode.className='im ink';this.parentNode.innerHTML=window.MJ_INK('"+(MO[id]||"mount")+"')\"></figure>"}
   return "<figure class='im ink'>"+ink(MO[id]||"mount")+"</figure>"};
 window.MJ_INK=ink;
+window.MJ_NAVER_URL=function(id){var q=NV[id];return q?"https://map.naver.com/p/search/"+encodeURIComponent(q):""};
+window.MJ_NAVER_LABEL=function(lang){return NL[lang]||NL.en};
 window.MJ_NAVER=function(id,lang){var q=NV[id];if(!q)return "";return "<a class='btn2 nv' target=_blank rel=noopener href='https://map.naver.com/p/search/"+encodeURIComponent(q)+"'>"+NL[lang]+"</a>"};
 window.MJ_CREDIT=function(lang){return "<p class=cr>"+CR[lang]+"</p>"};
+})();
+</script>
+<style id="tv-css">
+/* ---- 링크·전화 (휴대폰/PC) ---- */
+a.btn2{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;color:var(--ink)}
+.tel{color:inherit;text-decoration:none;white-space:nowrap}
+.item p .tel{border-bottom:1px solid var(--line)}
+/* ---- 리모컨·키보드 포커스: 얇은 accent 선 ---- */
+html.kbd button:focus,html.kbd a:focus,html.kbd input:focus{outline:2px solid var(--accent);outline-offset:6px}
+html.kbd .grid .tile:focus{outline:0}
+html.kbd .grid .tile:focus b{color:var(--accent)}
+html.kbd .grid .tile:focus::after{content:"";display:block;width:56px;height:2px;background:var(--accent);margin-top:12px}
+html.kbd .tools .chip:focus{opacity:1;outline-offset:0}
+/* ---- TV 홈: 휴대폰에서 보기 QR ---- */
+main.home>.phoneqr{position:absolute;right:0;bottom:0;z-index:1;display:flex;flex-direction:column;align-items:center;gap:10px}
+.phoneqr .qrbox{width:150px;background:#f6f2e9;padding:8px;border:1px solid var(--line)}
+.phoneqr .qrbox svg{display:block;width:100%;height:auto}
+.phoneqr p{margin:0;color:var(--mute);font-size:.7em;letter-spacing:.2em}
+/* ---- TV(10피트 UI): 같은 구성을 키우고 여백·터치 영역만 넓힘 ---- */
+html.tv body{font-size:30px}
+html.tv .tools{gap:8px}
+html.tv .tools .chip{min-height:72px;padding:0 18px;font-size:.85em}
+html.tv .greet{font-size:.9em}
+html.tv .grid{max-width:980px}
+html.tv .grid .tile:nth-child(n){min-height:96px}
+html.tv .grid .tile b{font-size:46px}
+html.tv .grid .tile span:not(.g){font-size:.9em}
+html.tv .back,html.tv .btn2,html.tv .chip{min-height:76px}
+html.tv .btn2{padding:0 32px}
+html.tv .item p{font-size:.95em}
+html.tv .cr{font-size:.8em}
+html.tv .im{flex-basis:260px;height:200px}
+html.tv #lang .lo{min-height:100px}
+html.tv #lang .lc{min-width:88px;min-height:88px}
+html.tv #qr .qrbox{width:min(52vh,70vw,520px)}
+html.tv .phoneqr .qrbox{width:180px}
+</style>
+<script id="tv-js">
+/* ===== 리모컨: 방향키 공간 내비게이션 · 확인 · 뒤로가기(461 / Backspace / Esc) ===== */
+(function(){
+var root=document.documentElement,opener=null;
+var LAYERS=["qr","co","lang","wel","set","idle","taxi"];
+function $(i){return document.getElementById(i)}
+function shown(e){return e&&getComputedStyle(e).display!=="none"}
+function layer(){for(var i=0;i<LAYERS.length;i++){var e=$(LAYERS[i]);if(shown(e))return e}return $("app")}
+function vis(e){var r=e.getBoundingClientRect();return r.width>0&&r.height>0}
+function cands(l){return [].filter.call(l.querySelectorAll("button,a[href],input"),vis)}
+function gap(a1,a2,b1,b2){return b1>a2?b1-a2:a1>b2?a1-b2:0}
+function pick(from,list,dir){
+  var a=from.getBoundingClientRect(),best=null,bs=1e9;
+  list.forEach(function(e){if(e===from||from.contains(e))return;var b=e.getBoundingClientRect(),m,c;
+    if(dir===40){if(b.top<a.top+2||b.top+b.height/2<=a.top+a.height/2)return;m=Math.max(0,b.top-a.bottom);c=gap(a.left,a.right,b.left,b.right)}
+    else if(dir===38){if(b.bottom>a.bottom-2||b.top+b.height/2>=a.top+a.height/2)return;m=Math.max(0,a.top-b.bottom);c=gap(a.left,a.right,b.left,b.right)}
+    else if(dir===39){if(b.left<a.left+2||b.left+b.width/2<=a.left+a.width/2)return;m=Math.max(0,b.left-a.right);c=gap(a.top,a.bottom,b.top,b.bottom)}
+    else{if(b.right>a.right-2||b.left+b.width/2>=a.left+a.width/2)return;m=Math.max(0,a.left-b.right);c=gap(a.top,a.bottom,b.top,b.bottom)}
+    var s=m+c*2;if(s<bs){bs=s;best=e}});
+  return best}
+function focusDefault(l,prev){
+  var e=null;
+  if(l===$("app"))e=prev&&document.querySelector(".tile[data-v='"+prev+"']")||document.querySelector("#main .back")||document.querySelector("#main .tile");
+  if(!e){var c=cands(l);e=c[0]}
+  if(e)e.focus()}
+function inView(e,box){var r=e.getBoundingClientRect(),b=box.getBoundingClientRect();return r.bottom>b.top+4&&r.top<b.bottom-4}
+function close(l){
+  if(l.id==="wel"){l.style.display="none";go("home");return}
+  l.style.display="none";
+  if(opener&&document.body.contains(opener)&&vis(opener))opener.focus();else focusDefault(layer())}
+/* 화면 전환 뒤 포커스를 이어 준다 */
+var _go=window.go;
+window.go=function(v){var prev=V;_go(v);if(root.classList.contains("kbd"))focusDefault($("app"),prev)};
+document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("button,a");if(b&&!b.closest("#qr,#lang,#taxi,#co"))opener=b},true);
+document.addEventListener("pointerdown",function(){root.classList.remove("kbd")},true);
+document.addEventListener("keydown",function(e){
+  var k=e.keyCode,t=e.target,typing=t&&t.tagName==="INPUT";
+  if(Date.now()-(window.MJ_WOKE||0)<80){e.preventDefault();return}
+  if(k===461||k===27||(k===8&&!typing)){
+    e.preventDefault();var l=layer();
+    if(l!==$("app"))close(l);
+    else if(V!=="home")go("home");
+    return}
+  if(k<37||k>40||(typing&&(k===37||k===39)))return;
+  e.preventDefault();root.classList.add("kbd");
+  var l=layer(),cur=document.activeElement;
+  if(!cur||cur===document.body||!l.contains(cur)){focusDefault(l);return}
+  var n=pick(cur,cands(l),k),box=(k===38||k===40)&&l.querySelector(".list");
+  if(box&&(cur.closest(".list")||(n&&n.closest(".list")))&&(!n||!inView(n,box))){
+    var before=box.scrollTop;box.scrollTop+=(k===40?1:-1)*box.clientHeight*.6;
+    if(box.scrollTop!==before&&!(n&&inView(n,box)))return}
+  if(n)n.focus()
+});
 })();
 </script>
 </body></html>

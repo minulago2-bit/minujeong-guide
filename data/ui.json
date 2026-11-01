@@ -134,5 +134,29 @@
     "ja": "閉じる",
     "zh": "关闭",
     "desc": "QR 화면 닫기"
+  },
+  {
+    "key": "openBtn",
+    "ko": "바로 열기",
+    "en": "Open",
+    "ja": "開く",
+    "zh": "打开",
+    "desc": "링크 버튼 (휴대폰·PC). TV에서는 qrBtn 문구로 QR을 띄웁니다"
+  },
+  {
+    "key": "gmapBtn",
+    "ko": "구글지도에서 보기",
+    "en": "Open in Google Maps",
+    "ja": "Googleマップで開く",
+    "zh": "在 Google 地图中打开",
+    "desc": "구글지도 링크 버튼 (휴대폰·PC)"
+  },
+  {
+    "key": "phoneView",
+    "ko": "휴대폰에서 보기",
+    "en": "View on your phone",
+    "ja": "スマートフォンで見る",
+    "zh": "在手机上查看",
+    "desc": "TV 홈 화면의 QR 아래 문구"
   }
 ]

@@ -72,6 +72,12 @@
     "example": ""
   },
   {
+    "key": "site_url",
+    "value": "https://minulago2-bit.github.io/minujeong-guide/",
+    "desc": "가이드 공개 주소. TV의 ‘휴대폰에서 보기’ QR과 webOS 앱에서 사용",
+    "example": "https://minulago2-bit.github.io/minujeong-guide/"
+  },
+  {
     "key": "property_id",
     "value": "minujeong",
     "desc": "숙소 식별용 메모 (화면에 안 보임)",
