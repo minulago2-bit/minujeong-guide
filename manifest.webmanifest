@@ -1,0 +1,16 @@
+{
+  "name": "미누정 게스트 가이드",
+  "short_name": "미누정",
+  "description": "Minujeong Hanok · Guest Guide",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#dcd6ca",
+  "theme_color": "#dcd6ca",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
