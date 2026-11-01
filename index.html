@@ -600,7 +600,8 @@ function showWelcome(code){
   var w=W[code]||W[L]||W.en,e=$("wel"),d=D[L];if(!w||!G.n||!d)return;
   e.lang=w.l;
   e.innerHTML=(w.e?"<p class=we>"+h(w.e)+"</p>":"")+"<h1 class=serif>"+h(w.g).replace("{n}",h(G.n))+"</h1><p class='wb serif'>"+h(d.brand)+"</p>"+
-    (w.s?"<p class=ws>"+h(w.s)+"</p>":"")+"<button class=chip id=welGo>"+h(w.b)+" →</button>"+(window.MJ_TV&&w.h?"<p class=wh>"+h(w.h)+"</p>":"");
+    (w.s?"<p class=ws>"+h(w.s)+"</p>":"")+"<button class=chip id=welGo>"+h(w.b)+" →</button>"+(window.MJ_TV&&w.h?"<p class=wh>"+h(w.h)+"</p>":"")+
+    "<div class=welart aria-hidden=true>"+getArt(CFG.home_art||"line")+"</div>";
   e.style.display="flex";
   if(window.MJ_TV)setTimeout(function(){var b=$("welGo");if(b)b.focus()},0)}
 
@@ -820,6 +821,12 @@ btn(false);
 #wel{cursor:pointer;color:var(--ink);background-color:var(--bg);background-image:radial-gradient(95% 62% at 14% -10%,var(--gx),transparent 72%),radial-gradient(85% 58% at 100% 108%,var(--gy),transparent 72%),linear-gradient(172deg,var(--panel) 0%,var(--bg) 54%,color-mix(in srgb,var(--bg) 80%,var(--ink)) 100%)}
 @supports not (color:color-mix(in srgb,red,blue)){#wel{background-image:radial-gradient(95% 62% at 14% -10%,var(--gx),transparent 72%),radial-gradient(85% 58% at 100% 108%,var(--gy),transparent 72%),linear-gradient(172deg,var(--panel) 0%,var(--bg) 54%,rgb(var(--fx-mix)) 100%)}}
 #wel::before{background:var(--accent);opacity:.8}
+/* 홈과 같은 하단 세로 선 그림 */
+#wel{padding-bottom:calc(min(26vh,34vw) * .8)}
+#wel .welart{position:absolute;left:0;right:0;bottom:0;height:min(26vh,34vw);max-width:none;display:flex;justify-content:center;overflow:hidden;pointer-events:none}
+#wel .welart:empty{display:none}
+#wel .welart .pal{width:auto;height:100%;aspect-ratio:1200/360;flex:none;-webkit-mask-image:linear-gradient(90deg,transparent,#000 24%,#000 76%,transparent);mask-image:linear-gradient(90deg,transparent,#000 24%,#000 76%,transparent)}
+@supports not (aspect-ratio:1){#wel .welart .pal{width:calc(min(26vh,34vw) * 10 / 3)}}
 #wel .chip{color:var(--ink);border-color:var(--ink)}
 #wel .we{color:var(--accent);opacity:1}
 #wel .ws,#wel .wh{color:var(--mute);opacity:1}
