@@ -785,10 +785,12 @@ function setPref(v){try{localStorage.setItem("mj_music2",v)}catch(e){}}
 function wanted(){var p=pref();if(p)return p==="on";return window.MJ_TV?/^y/i.test(M.set.tv_autoplay||"Y"):String(M.set.mobile_default||"off")==="on"}
 function btn(on){var b=$("mu");if(b){b.hidden=!M.tracks.length;b.setAttribute("aria-pressed",!!on)}}
 function shuffle(n){var a=[],i,j,t;for(i=0;i<n;i++)a.push(i);for(i=n-1;i>0;i--){j=Math.floor(Math.random()*(i+1));t=a[i];a[i]=a[j];a[j]=t}return a}
+/* 터치 전 자동재생이 막히면 ♪ 는 켜진 채로 두고 첫 터치에 시작한다 */
+function tryPlay(){var p=au.play();if(p&&p.catch)p.catch(function(){if(started)btn(false)})}
 function next(){
   if(!M.tracks.length)return;
   if(!order.length)order=M.set.order==="shuffle"?shuffle(M.tracks.length):M.tracks.map(function(x,i){return i});
-  idx=order.shift();au.src=M.tracks[idx].file;var p=au.play();if(p&&p.catch)p.catch(function(){btn(false)})}
+  idx=order.shift();au.src=M.tracks[idx].file;tryPlay()}
 function react(){
   if(!/^y/i.test(M.set.react_lines||"Y")||an||M.tracks.some(function(t){return /^https?:/i.test(t.file)})||!(window.AudioContext||window.webkitAudioContext))return;
   try{if(matchMedia("(prefers-reduced-motion:reduce)").matches)return}catch(e){}
@@ -801,9 +803,11 @@ function loop(t){
   var lv=Math.min(1,s/a.length/90);p.style.transform=au.paused?"":"scaleY("+(1+lv*.04).toFixed(3)+")"}
 function play(){
   if(!M.tracks.length)return;
-  if(!au){au=new Audio();au.preload="auto";au.volume=Math.max(0,Math.min(1,parseFloat(M.set.volume)||.4));au.loop=M.tracks.length===1;au.addEventListener("ended",next);au.addEventListener("error",function(){if(M.tracks.length>1)next()});react()}
+  if(!au){au=new Audio();au.preload="auto";au.volume=Math.max(0,Math.min(1,parseFloat(M.set.volume)||.4));au.loop=M.tracks.length===1;au.addEventListener("ended",next);au.addEventListener("error",function(){if(M.tracks.length>1)next()})}
+  /* 소리 분석(AudioContext)은 터치 뒤에만 만든다: 터치 전에 만들면 멈춘 상태라 소리가 나지 않는다 */
+  if(started)react();
   if(ac&&ac.state==="suspended")ac.resume();
-  if(idx<0)next();else{var p=au.play();if(p&&p.catch)p.catch(function(){btn(false)})}
+  if(idx<0)next();else tryPlay();
   if(an&&!raf)raf=requestAnimationFrame(loop);
   btn(true)}
 function stop(){if(au)au.pause();btn(false)}
@@ -817,7 +821,9 @@ window.MJ_MUSIC_CREDIT=function(lang){
 fetch("data/music.json",{cache:"no-cache"}).then(function(r){if(!r.ok)throw new Error("http");return r.json()}).then(function(j){
   var ok=function(t){return t&&typeof t.file==="string"&&/^[\w\-\/.]+\.(mp3|m4a|ogg)$|^https:\/\/\S+$/i.test(t.file)&&!/^\s*(n|no|false|0)\s*$/i.test(String(t.show||""))};
   M.set=(j&&j.settings)||{};M.tracks=((j&&j.tracks)||[]).filter(ok);
-  btn(false);if(started&&wanted())play();
+  btn(false);
+  /* 켜짐이면 터치 전에도 재생을 시도: 허용되는 곳(webOS 앱 등)에서는 바로 나오고, 막히면 ♪ 켜짐 표시를 유지한 채 첫 터치에 시작 */
+  if(wanted())play();
   if(typeof V!=="undefined"&&V==="guide"&&typeof render==="function")render();
 }).catch(function(){M.tracks=[];btn(false)});
 btn(false);
