@@ -1,0 +1,62 @@
+# GitHub Pages 배포: main 은 사이트 루트, 작업 브랜치는 /preview/ 에 함께 올린다.
+#   https://minulago2-bit.github.io/minujeong-guide/          ← main
+#   https://minulago2-bit.github.io/minujeong-guide/preview/  ← PREVIEW_BRANCH
+# 사용 전 저장소 Settings → Pages → Source 를 "GitHub Actions" 로 바꿔야 한다.
+name: Pages (main + preview)
+
+on:
+  push:
+    branches: [main, feature/tv-standbyme]
+  workflow_dispatch:
+
+env:
+  PREVIEW_BRANCH: feature/tv-standbyme
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: main
+
+      - name: Checkout preview branch
+        id: preview
+        continue-on-error: true   # 브랜치를 지운 뒤에도 main 배포는 계속된다
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.PREVIEW_BRANCH }}
+          path: preview
+
+      - name: Assemble site
+        run: |
+          mkdir -p _site
+          rsync -a --exclude .git --exclude .github main/ _site/
+          if [ "${{ steps.preview.outcome }}" = "success" ]; then
+            mkdir -p _site/preview
+            rsync -a --exclude .git --exclude .github preview/ _site/preview/
+          fi
+          touch _site/.nojekyll
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - id: deployment
+        uses: actions/deploy-pages@v4
