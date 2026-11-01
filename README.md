@@ -104,7 +104,7 @@ webos/                  (선택) webOS 앱 패키지 파일
     "order": "sequential",      // sequential(순서대로) / shuffle(섞기)
     "volume": 0.4,              // 0 ~ 1
     "tv_autoplay": "Y",         // TV에서 첫 터치 후 자동 재생
-    "mobile_default": "off",    // 휴대폰·PC 기본값
+    "mobile_default": "on",     // 휴대폰·PC 기본값 (on / off)
     "react_lines": "Y"          // 하단 세로 선이 소리에 맞춰 살짝 움직임
   },
   "tracks": [
@@ -115,10 +115,11 @@ webos/                  (선택) webOS 앱 패키지 파일
 ```
 
 3. `title`·`artist`·`license`는 이용 안내 화면 맨 아래 크레딧에 표시됩니다. 라이선스가 출처 표기를 요구하면 꼭 채우세요.
-4. 개발용 `placeholder-1.mp3`, `placeholder-2.mp3`는 지워도 됩니다(목록에서도 빼세요).
+4. 지금은 `audio/hanok-morning-suite.mp3` 한 곡이며, 곡이 하나면 끊김 없이 계속 반복됩니다.
 5. `sw.js` 맨 위의 `VERSION`을 `mj-v2`처럼 올리면 기존 기기도 새 파일을 받습니다.
 
 - 브라우저 정책상 TV에서도 첫 터치나 리모컨 입력이 있어야 재생이 시작됩니다.
+- 환영 화면에서 "시작하기"를 누르는 순간 음악이 시작됩니다.
 - 상단 `♪`로 켜고 끄며, 선택은 그 기기에 기억됩니다.
 
 ## TV(LG 스탠바이미)에서 여는 방법

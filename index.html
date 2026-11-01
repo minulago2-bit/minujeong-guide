@@ -780,8 +780,8 @@ window.MJ_CREDIT=function(lang){return "<p class=cr>"+CR[lang]+"</p>"};
 var M={tracks:[],set:{}},au=null,idx=-1,order=[],started=false,ac=null,an=null,raf=0,lastT=0;
 var LBL={ko:"배경음악",en:"Music",ja:"音楽",zh:"背景音乐"};
 function $(i){return document.getElementById(i)}
-function pref(){try{return localStorage.getItem("mj_music")}catch(e){return null}}
-function setPref(v){try{localStorage.setItem("mj_music",v)}catch(e){}}
+function pref(){try{return localStorage.getItem("mj_music2")}catch(e){return null}}
+function setPref(v){try{localStorage.setItem("mj_music2",v)}catch(e){}}
 function wanted(){var p=pref();if(p)return p==="on";return window.MJ_TV?/^y/i.test(M.set.tv_autoplay||"Y"):String(M.set.mobile_default||"off")==="on"}
 function btn(on){var b=$("mu");if(b){b.hidden=!M.tracks.length;b.setAttribute("aria-pressed",!!on)}}
 function shuffle(n){var a=[],i,j,t;for(i=0;i<n;i++)a.push(i);for(i=n-1;i>0;i--){j=Math.floor(Math.random()*(i+1));t=a[i];a[i]=a[j];a[j]=t}return a}
@@ -801,7 +801,7 @@ function loop(t){
   var lv=Math.min(1,s/a.length/90);p.style.transform=au.paused?"":"scaleY("+(1+lv*.04).toFixed(3)+")"}
 function play(){
   if(!M.tracks.length)return;
-  if(!au){au=new Audio();au.preload="auto";au.volume=Math.max(0,Math.min(1,parseFloat(M.set.volume)||.4));au.addEventListener("ended",next);au.addEventListener("error",function(){if(M.tracks.length>1)next()});react()}
+  if(!au){au=new Audio();au.preload="auto";au.volume=Math.max(0,Math.min(1,parseFloat(M.set.volume)||.4));au.loop=M.tracks.length===1;au.addEventListener("ended",next);au.addEventListener("error",function(){if(M.tracks.length>1)next()});react()}
   if(ac&&ac.state==="suspended")ac.resume();
   if(idx<0)next();else{var p=au.play();if(p&&p.catch)p.catch(function(){btn(false)})}
   if(an&&!raf)raf=requestAnimationFrame(loop);
