@@ -60,6 +60,26 @@
     "desc_zh": "按时间与喜好安排路线与体验"
   },
   {
+    "id": "transit",
+    "order": "3.5",
+    "show": "Y",
+    "sos": "N",
+    "taxi": "Y",
+    "icon": "train",
+    "title_ko": "교통",
+    "title_en": "Getting Around",
+    "title_ja": "交通",
+    "title_zh": "交通",
+    "sub_ko": "지하철 · 버스 · 공항",
+    "sub_en": "Subway · Bus · Airport",
+    "sub_ja": "地下鉄・バス・空港",
+    "sub_zh": "地铁 · 公交 · 机场",
+    "desc_ko": "미누정까지, 그리고 서울 곳곳으로",
+    "desc_en": "Getting here, and around Seoul",
+    "desc_ja": "ミヌジョンへ、そしてソウル各地へ",
+    "desc_zh": "前往 Minujeong 与首尔各地"
+  },
+  {
     "id": "play",
     "order": "4",
     "show": "N",

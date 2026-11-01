@@ -890,24 +890,6 @@
     "url": ""
   },
   {
-    "id": "g_move",
-    "menu": "guide",
-    "order": "4.9",
-    "show": "Y",
-    "type": "그룹",
-    "title_ko": "교통",
-    "title_en": "Getting around",
-    "title_ja": "交通",
-    "title_zh": "交通",
-    "body_ko": "",
-    "body_en": "",
-    "body_ja": "",
-    "body_zh": "",
-    "ja_ok": "N",
-    "zh_ok": "N",
-    "url": ""
-  },
-  {
     "id": "g_out",
     "menu": "guide",
     "order": "6.9",
@@ -1017,7 +999,7 @@
   },
   {
     "id": "trans_subway",
-    "menu": "guide",
+    "menu": "transit",
     "order": "5",
     "show": "Y",
     "type": "일반",
@@ -1035,7 +1017,7 @@
   },
   {
     "id": "trans_bus",
-    "menu": "guide",
+    "menu": "transit",
     "order": "5.2",
     "show": "Y",
     "type": "일반",
@@ -1053,7 +1035,7 @@
   },
   {
     "id": "trans_airport",
-    "menu": "guide",
+    "menu": "transit",
     "order": "5.4",
     "show": "Y",
     "type": "일반",
@@ -1071,7 +1053,7 @@
   },
   {
     "id": "trans_apps",
-    "menu": "guide",
+    "menu": "transit",
     "order": "5.6",
     "show": "Y",
     "type": "일반",
