@@ -775,7 +775,8 @@ function crane(x,y){return "<g transform='translate("+x+","+y+")'><path d='M-40,
 var AK={tray:"point",fish:"point",cup:"point",market:"point",mount:"line",rain:"line",night:"line",map:"line",palace:"stone",hanok:"stone",eaves:"stone",window:"stone",door:"stone",vase:"brush",fan:"brush",brush:"brush",heat:"charcoal",flame:"charcoal"};
 function ink(m){var a=window.getArt?getArt(AK[m]||"dialogue"):"";return a.replace('viewBox="0 0 1200 360" preserveAspectRatio="xMidYMax slice"','viewBox="150 135 900 225" preserveAspectRatio="xMidYMax meet"')}
 window.MJ_MEDIA=function(id,title,lang){
-  if(!/^(eat|culture)_|^course_0[123]$/.test(id))return "";
+  /* 한국 문화는 글 중심이라 그림을 넣지 않는다 */
+  if(!/^eat_|^course_0[123]$/.test(id))return "";
   if(PH[id]){return "<figure class='im ph'><img class=bk aria-hidden=true alt='' loading=lazy decoding=async src='"+wm(PH[id][0])+"'><img loading=lazy decoding=async alt='"+String(title).replace(/'/g,"")+"' src='"+wm(PH[id][0])+"' onerror=\"this.parentNode.className='im ink';this.parentNode.innerHTML=window.MJ_INK('"+(MO[id]||"mount")+"')\"></figure>"}
   return "<figure class='im ink'>"+ink(MO[id]||"mount")+"</figure>"};
 window.MJ_INK=ink;

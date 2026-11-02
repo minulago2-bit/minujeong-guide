@@ -130,14 +130,14 @@
     "title_en": "Korean Culture",
     "title_ja": "韓国文化",
     "title_zh": "韩国文化",
-    "sub_ko": "한옥에서 만나는 이야기",
-    "sub_en": "Stories you can see in this house",
-    "sub_ja": "韓屋で出会う物語",
-    "sub_zh": "在韩屋里遇见的故事",
-    "desc_ko": "이 집에서 보이는 한국",
-    "desc_en": "Korea you can see in this house",
-    "desc_ja": "この家に見える韓国",
-    "desc_zh": "在这座房子里看见韩国"
+    "sub_ko": "정서 · 한옥 · 서촌 이야기",
+    "sub_en": "Heart · Hanok · Seochon stories",
+    "sub_ja": "心・韓屋・西村の物語",
+    "sub_zh": "人情 · 韩屋 · 西村故事",
+    "desc_ko": "알고 보면 더 재미있는 한국, 그리고 이 동네",
+    "desc_en": "Korea is more fun once you know the backstory — and so is this neighbourhood",
+    "desc_ja": "知るともっと面白い韓国、そしてこの町",
+    "desc_zh": "了解之后更有趣的韩国，还有这片街区"
   },
   {
     "id": "out",
