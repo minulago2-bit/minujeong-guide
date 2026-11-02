@@ -524,7 +524,7 @@ function render(){
     /* 긴급번호는 스크롤되지 않는 왼쪽 열(모바일은 상단)에 고정 */
     var pin=pins.length?"<div class=pin>"+pins.map(function(it){return "<div><span class=big>"+telBig(it[0])+"</span><span>"+h(it[1])+"</span></div>"}).join("")+"</div>":"";
     m.innerHTML="<div class=view><div class=side><div><h1 class=serif>"+h(t.t)+"</h1><p>"+esc(s.d)+"</p>"+pin+"</div>"+((V==="play"||V==="course")?"<div class=sideart aria-hidden=true>"+getArt(V==="play"?"point":"stone")+"</div>":"")+"<button class=back data-v=home>← "+h(d.home)+"</button></div><div class=list>"+
-    list+(V==="eat"&&window.MJ_CREDIT?MJ_CREDIT(L):"")+(V==="guide"&&window.MJ_MUSIC_CREDIT?MJ_MUSIC_CREDIT(L):"")+
+    list+((V==="eat"||V==="course")&&window.MJ_CREDIT?MJ_CREDIT(L,V):"")+(V==="guide"&&window.MJ_MUSIC_CREDIT?MJ_MUSIC_CREDIT(L):"")+
     (s.taxi?"<div class=item><button class=btn2 id=taxiOpen>"+h(d.taxiBtn)+"</button></div>":"")+"</div></div>";
     var l=m.querySelector(".list");if(l)l.scrollTop=keep;
   }
@@ -689,29 +689,43 @@ document.addEventListener("visibilitychange",function(){if(!document.hidden)refr
 .im{margin:0;flex:0 0 190px;height:150px;overflow:hidden;border-radius:0;background:var(--panel);background:color-mix(in srgb,var(--panel) 70%,transparent);border:1px solid var(--line);align-self:flex-start}
 .im.ink{padding:0 10px 12px}
 .im.ph{position:relative}
-.im.ph img{filter:saturate(.62) contrast(.9) sepia(.12) brightness(.97)}
-.im.ph::after{content:"";position:absolute;top:0;right:0;bottom:0;left:0;pointer-events:none;background:radial-gradient(120% 100% at 50% 40%,transparent 55%,rgba(27,25,22,.28))}
+.im.ph img{filter:saturate(1.08) contrast(1.03)}
+.im.ph::after{display:none}
 .im img,.im svg{width:100%;height:100%;object-fit:cover;display:block}
 .acts{display:flex;flex-wrap:wrap;gap:10px}
 .acts .btn2{margin-top:10px;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
 .cr{font-size:.7em;color:var(--mute);margin:14px 4px 0}
 @media (max-width:760px){.item.media{flex-direction:column;gap:12px}.im{flex:none;width:100%;height:170px}.acts .btn2{flex:1 1 100%}}
+/* 사진 액자는 4:3 (구글·네이버·카카오 장소 사진에서 가장 흔한 비율). 비율이 다른 사진은 자르지 않고 흐린 배경 위에 전체를 보여 준다 */
+.im{height:142px}
+.im.ph img{position:absolute;top:0;left:0;object-fit:contain}
+.im.ph img.bk{object-fit:cover;filter:blur(14px) brightness(1.02);transform:scale(1.15);opacity:.75}
+html.tv .im{height:195px}
+@media (max-width:760px){.im{height:auto;aspect-ratio:4/3}}
+@supports not (aspect-ratio:1){@media (max-width:760px){.im{height:62vw}}}
 </style>
 <script id="media-js">
 /* ===== 항목 이미지(사진/수묵화) + 네이버지도 ===== */
 (function(){
 var WM="https://commons.wikimedia.org/wiki/Special:FilePath/";
 function wm(f){return WM+encodeURIComponent(f)+"?width=640"}
+/* [커먼즈 파일, 설명, 저작자, 라이선스] — 사진 아래 크레딧에 저작자·라이선스가 표시된다 */
 var PH={
- eat_01:["Naengmyeon_(cold_noodles).jpg","Naengmyeon 냉면"],
- eat_03:["Sujebi.jpg","Sujebi 수제비"],
- eat_04:["Dolsot-bibimbap.jpg","Bibimbap 비빔밥"],
- eat_05:["Beef_curry_rice_003.jpg","Curry rice"],
- eat_06:["Sushi_platter.jpg","Sushi"],
- eat_09:["Bacon,_lettuce,_tomato,_and_avocado.jpg","Sandwich"],
- eat_10:["Skillet_cornbread_(cropped).jpg","Cornbread"],
- eat_12:["Samgye-tang_2.jpg","Samgyetang 삼계탕"],
- course_01:["Gwanghwamun_20240413.jpg","Gwanghwamun"],
+ eat_01:["Naengmyeon_(cold_noodles).jpg","Naengmyeon 냉면","wjlee4284","CC BY 2.5"],
+ eat_02:["Korean_royal_court_cuisine-Sinseollo-Casserole-01.jpg","Sinseollo 신선로","World to Table","CC BY-SA 3.0"],
+ eat_03:["Korean_pancake-Kimchijeon-01.jpg","Kimchijeon 김치전","Prince Roy","CC BY 2.0"],
+ eat_04:["Dolsot-bibimbap.jpg","Bibimbap 비빔밥","Sous Chef","CC BY 2.0"],
+ eat_05:["Beef_curry_rice_003.jpg","Curry rice","Ocdp","CC0"],
+ eat_06:["Sushi_platter.jpg","Sushi","chidorian","CC BY-SA 2.0"],
+ eat_07:["Deluxe_sashimi_platter_01.jpg","Sashimi 사시미","T.Tseng","CC BY 2.0"],
+ eat_08:["Korean_cuisine-Dubu_kimchi-01.jpg","Dubu kimchi 두부김치","benghan","CC BY-SA 2.0"],
+ eat_09:["Schiacciata.jpg","Schiacciata sandwich","Emilafreniere","CC0"],
+ eat_10:["Piece_of_cornbread_on_plate.jpg","Cornbread 콘브레드","Douglas P Perkins","CC BY 3.0"],
+ eat_11:["Korea_Tongin_Market_01_(12920987714).jpg","Tongin Market 통인시장","Korea.net","CC BY-SA 2.0"],
+ eat_12:["Ginseng_Chicken_Soup.jpg","Samgyetang 삼계탕","Korea.net","CC BY-SA 2.0"],
+ course_01:["Gwanghwamun_20240413.jpg","Gwanghwamun","*Youngjin","CC BY-SA 4.0"],
+ course_02:["Park_No-su_Art_Museum.jpg","Park No-su Art Museum 박노수미술관","Jjw","CC BY-SA 4.0"],
+ course_03:["Giringyo.jpg","Suseongdong Valley 수성동계곡","오모군","CC BY 3.0"],
 };
 var MO={guide_01:"wifi",guide_02:"heat",guide_03:"shoe",guide_04:"crane",guide_05:"trash",guide_06:"bell",
  eat_02:"tray",eat_07:"fish",eat_08:"cup",
@@ -762,13 +776,15 @@ var AK={tray:"point",fish:"point",cup:"point",market:"point",mount:"line",rain:"
 function ink(m){var a=window.getArt?getArt(AK[m]||"dialogue"):"";return a.replace('viewBox="0 0 1200 360" preserveAspectRatio="xMidYMax slice"','viewBox="150 135 900 225" preserveAspectRatio="xMidYMax meet"')}
 window.MJ_MEDIA=function(id,title,lang){
   if(!/^(eat|culture)_|^course_0[123]$/.test(id))return "";
-  if(PH[id]){return "<figure class='im ph'><img loading=lazy decoding=async alt='"+String(title).replace(/'/g,"")+"' src='"+wm(PH[id][0])+"' onerror=\"this.parentNode.className='im ink';this.parentNode.innerHTML=window.MJ_INK('"+(MO[id]||"mount")+"')\"></figure>"}
+  if(PH[id]){return "<figure class='im ph'><img class=bk aria-hidden=true alt='' loading=lazy decoding=async src='"+wm(PH[id][0])+"'><img loading=lazy decoding=async alt='"+String(title).replace(/'/g,"")+"' src='"+wm(PH[id][0])+"' onerror=\"this.parentNode.className='im ink';this.parentNode.innerHTML=window.MJ_INK('"+(MO[id]||"mount")+"')\"></figure>"}
   return "<figure class='im ink'>"+ink(MO[id]||"mount")+"</figure>"};
 window.MJ_INK=ink;
 window.MJ_NAVER_URL=function(id){var q=NV[id];return q?"https://map.naver.com/p/search/"+encodeURIComponent(q):""};
 window.MJ_NAVER_LABEL=function(lang){return NL[lang]||NL.en};
 window.MJ_NAVER=function(id,lang){var q=NV[id];if(!q)return "";return "<a class='btn2 nv' target=_blank rel=noopener href='https://map.naver.com/p/search/"+encodeURIComponent(q)+"'>"+NL[lang]+"</a>"};
-window.MJ_CREDIT=function(lang){return "<p class=cr>"+CR[lang]+"</p>"};
+window.MJ_CREDIT=function(lang,v){
+  var c=Object.keys(PH).filter(function(k){return k.indexOf(v+"_")===0}).map(function(k){var x=PH[k];return x[1]+" — "+x[2]+" ("+x[3]+")"});
+  return c.length?"<p class=cr>"+CR[lang]+"<br>"+c.join(" · ").replace(/[&<>"]/g,function(ch){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[ch]})+"</p>":""};
 })();
 </script>
 <style id="music-css">
