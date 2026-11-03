@@ -520,11 +520,12 @@ function render(){
       var nu=window.MJ_NAVER_URL?MJ_NAVER_URL(it[4]):"",nvb=nu?linkBtn(nu,it[0],MJ_NAVER_LABEL(L),"btn2 nv"):"";
       var ex=langLine(it[7],d)+action(it[6],d);
       if(!window.MJ_MEDIA)return "<div class=item><h3 class=serif>"+h(it[0])+"</h3><p>"+body(it[1])+"</p>"+ex+qb+"</div>";
-      return "<div class='item media'>"+MJ_MEDIA(it[4],it[0],L)+"<div class=tx><h3 class=serif>"+h(it[0])+"</h3><p>"+body(it[1])+"</p>"+ex+"<div class=acts>"+nvb+qb+"</div></div></div>"}).join("");
+      var md=MJ_MEDIA(it[4],it[0],L);
+      return "<div class='item media"+(md&&V==="culture"?" sm":"")+"'>"+md+"<div class=tx><h3 class=serif>"+h(it[0])+"</h3><p>"+body(it[1])+"</p>"+ex+"<div class=acts>"+nvb+qb+"</div></div></div>"}).join("");
     /* 긴급번호는 스크롤되지 않는 왼쪽 열(모바일은 상단)에 고정 */
     var pin=pins.length?"<div class=pin>"+pins.map(function(it){return "<div><span class=big>"+telBig(it[0])+"</span><span>"+h(it[1])+"</span></div>"}).join("")+"</div>":"";
     m.innerHTML="<div class=view><div class=side><div><h1 class=serif>"+h(t.t)+"</h1><p>"+esc(s.d)+"</p>"+pin+"</div>"+((V==="play"||V==="course")?"<div class=sideart aria-hidden=true>"+getArt(V==="play"?"point":"stone")+"</div>":"")+"<button class=back data-v=home>← "+h(d.home)+"</button></div><div class=list>"+
-    list+((V==="eat"||V==="course")&&window.MJ_CREDIT?MJ_CREDIT(L,V):"")+(V==="guide"&&window.MJ_MUSIC_CREDIT?MJ_MUSIC_CREDIT(L):"")+
+    list+((V==="eat"||V==="course"||V==="culture")&&window.MJ_CREDIT?MJ_CREDIT(L,V):"")+(V==="guide"&&window.MJ_MUSIC_CREDIT?MJ_MUSIC_CREDIT(L):"")+
     (s.taxi?"<div class=item><button class=btn2 id=taxiOpen>"+h(d.taxiBtn)+"</button></div>":"")+"</div></div>";
     var l=m.querySelector(".list");if(l)l.scrollTop=keep;
   }
@@ -701,6 +702,11 @@ document.addEventListener("visibilitychange",function(){if(!document.hidden)refr
 .im.ph img{position:absolute;top:0;left:0;object-fit:contain}
 .im.ph img.bk{object-fit:cover;filter:blur(14px) brightness(1.02);transform:scale(1.15);opacity:.75}
 html.tv .im{height:195px}
+/* 한국 문화: 글 옆 작은 사진 (휴대폰에서도 글 옆에 둔다) */
+.item.media.sm{flex-direction:row;gap:18px}
+.item.media.sm .im{flex:0 0 120px;width:120px;height:90px}
+html.tv .item.media.sm .im{flex-basis:168px;width:168px;height:126px}
+@media (max-width:760px){.item.media.sm{gap:12px}.item.media.sm .im{flex-basis:92px;width:92px;height:69px;aspect-ratio:auto}}
 @media (max-width:760px){.im{height:auto;aspect-ratio:4/3}}
 @supports not (aspect-ratio:1){@media (max-width:760px){.im{height:62vw}}}
 </style>
@@ -726,6 +732,16 @@ var PH={
  course_01:["Gwanghwamun_20240413.jpg","Gwanghwamun","*Youngjin","CC BY-SA 4.0"],
  course_02:["Park_No-su_Art_Museum.jpg","Park No-su Art Museum 박노수미술관","Jjw","CC BY-SA 4.0"],
  course_03:["Giringyo.jpg","Suseongdong Valley 수성동계곡","오모군","CC BY 3.0"],
+ /* 한국 문화: 글 옆 작은 사진 (어울리는 사진이 있는 글만) */
+ culture_01:["Lunch_cafe_in_Tongin_Market.jpg","Tongin Market 통인시장","Luvepoli","CC BY-SA 4.0"],
+ culture_04:["Inwangsan_Mountain_20161102_01_(30091798783).jpg","Inwangsan 인왕산","Korea.net","CC BY-SA 2.0"],
+ culture_05:["Ondol.png","Ondol 온돌","Dzihi","CC BY 3.0"],
+ culture_06:["Korea-Seoul-Bukchon-24.jpg","Hanok eaves 처마","Steve","CC BY 2.0"],
+ culture_08:["Korea-Snow_in_Andong-Papered_door_in_a_Hanok-01.jpg","Hanji door 한지 문","Robert at Picasa","CC BY 3.0"],
+ culture_10:["Jeong_Seon-Jangdongchunsaegdo.jpg","Jangdong in spring, Jeong Seon 장동춘색도","Jeong Seon","Public domain"],
+ culture_12:["Inwangjesaekdo.jpg","Inwang Jesaekdo, Jeong Seon 인왕제색도","Jeong Seon","Public domain"],
+ culture_13:["Yun_Dong-ju.jpg","Yun Dong-ju 윤동주","unknown","Public domain"],
+ culture_14:["Bukchon_Hanok_Village_북촌_한옥마을_October_1_2020_2.jpg","City hanok alley 도시 한옥 골목","S h y numis","CC BY-SA 4.0"],
 };
 var MO={guide_01:"wifi",guide_02:"heat",guide_03:"shoe",guide_04:"crane",guide_05:"trash",guide_06:"bell",
  eat_02:"tray",eat_07:"fish",eat_08:"cup",
@@ -775,8 +791,9 @@ function crane(x,y){return "<g transform='translate("+x+","+y+")'><path d='M-40,
 var AK={tray:"point",fish:"point",cup:"point",market:"point",mount:"line",rain:"line",night:"line",map:"line",palace:"stone",hanok:"stone",eaves:"stone",window:"stone",door:"stone",vase:"brush",fan:"brush",brush:"brush",heat:"charcoal",flame:"charcoal"};
 function ink(m){var a=window.getArt?getArt(AK[m]||"dialogue"):"";return a.replace('viewBox="0 0 1200 360" preserveAspectRatio="xMidYMax slice"','viewBox="150 135 900 225" preserveAspectRatio="xMidYMax meet"')}
 window.MJ_MEDIA=function(id,title,lang){
-  /* 한국 문화는 글 중심이라 그림을 넣지 않는다 */
-  if(!/^eat_|^course_0[123]$/.test(id))return "";
+  /* 한국 문화는 글 중심: 어울리는 사진이 있는 글에만 작게 넣고, 그림(수묵화)은 쓰지 않는다 */
+  if(/^culture_/.test(id)&&!PH[id])return "";
+  if(!/^(eat|culture)_|^course_0[123]$/.test(id))return "";
   if(PH[id]){return "<figure class='im ph'><img class=bk aria-hidden=true alt='' loading=lazy decoding=async src='"+wm(PH[id][0])+"'><img loading=lazy decoding=async alt='"+String(title).replace(/'/g,"")+"' src='"+wm(PH[id][0])+"' onerror=\"this.parentNode.className='im ink';this.parentNode.innerHTML=window.MJ_INK('"+(MO[id]||"mount")+"')\"></figure>"}
   return "<figure class='im ink'>"+ink(MO[id]||"mount")+"</figure>"};
 window.MJ_INK=ink;
