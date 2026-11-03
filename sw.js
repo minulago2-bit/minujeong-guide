@@ -1,6 +1,6 @@
 /* 미누정 게스트 가이드 서비스워커: 오프라인에서도 핵심 정보가 보이도록 캐시한다.
    콘텐츠를 바꾼 뒤 반드시 새로 받게 하려면 VERSION 숫자를 올린다. */
-var VERSION = "mj-v11";
+var VERSION = "mj-v12";
 var CORE = [
   "./",
   "index.html",
